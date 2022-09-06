@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Web3Storage } from 'web3.storage';
+
+const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_APIKEY });
 
 function createCoupon() {
   const [title, setTitle] = useState("");
@@ -7,6 +10,7 @@ function createCoupon() {
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [cid, setCid] = useState(null);
 
   const handleUpload = async (event) => {
     const image = event.target.files[0];
@@ -19,6 +23,20 @@ function createCoupon() {
       setLoading(true);
 
       console.log(title, description, photo, price, discount);
+      const couponData = JSON.stringify({ title, description, photoName: photo.name, price, discount });
+      const blob = new Blob([couponData], {type: "text/plain"});
+      const couponDataFile = new File([ blob ], 'couponData.json');
+
+      const cid = await client.put([couponDataFile, photo], {
+        onRootCidReady: localCid => {
+          console.log(`> 🔑 locally calculated Content ID: ${localCid} `)
+          console.log('> 📡 sending files to web3.storage ')
+        },
+        onStoredChunk: bytes => console.log(`> 🛰 sent ${bytes.toLocaleString()} bytes to web3.storage`)
+      })
+
+      console.log(`https://dweb.link/ipfs/${cid}`);
+      setCid(`https://dweb.link/ipfs/${cid}`);
 
       setLoading(false);
     } catch(error) {
@@ -50,6 +68,7 @@ function createCoupon() {
           </button>
        : <p>Loading...</p>
       }
+      <p>{cid}</p>
     </div>
   )
 }
