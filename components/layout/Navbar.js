@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import UAuth from '@uauth/js';
 
 const uauth = new UAuth({
@@ -28,9 +29,17 @@ function Navbar({ setDomainData }) {
         <meta name="description" content="Digital Coupon NFT" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Link href="/">
+        Home
+      </Link>
+      <Link href="/create-coupon">
+        Create Coupon
+      </Link>
       <button onClick={loginWithUnstoppableDomains}>
         Login with Unstoppable
       </button>
+      <br />
+      <br />
     </div>
   )
 }
