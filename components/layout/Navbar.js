@@ -28,7 +28,10 @@ function Navbar({ setDomainData }) {
         <title>Digital Coupon NFT</title>
         <meta name="description" content="Digital Coupon NFT" />
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Head> 
+      <Link href="/">
+        <img src="/logo.png" alt="Logo" style={{ width: "250px" }}/>
+      </Link>
       <Link href="/">
         Home
       </Link>

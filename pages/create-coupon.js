@@ -3,7 +3,7 @@ import { Web3Storage } from 'web3.storage';
 
 const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_APIKEY });
 
-function createCoupon() {
+function CreateCoupon() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState(null);
@@ -73,4 +73,4 @@ function createCoupon() {
   )
 }
 
-export default createCoupon;
+export default CreateCoupon;
