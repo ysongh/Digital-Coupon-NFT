@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import UAuth from '@uauth/js';
+import { ethers } from 'ethers';
+import Web3Modal from 'web3modal';
 
 const uauth = new UAuth({
   clientID: process.env.NEXT_PUBLIC_UNSTOPPABLEDOMAINS_CLIENTID,
@@ -8,7 +10,7 @@ const uauth = new UAuth({
   scope: "openid wallet"
 });
 
-function Navbar({ setDomainData }) {
+function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner }) {
   const loginWithUnstoppableDomains = async () => {
     try {
       const authorization = await uauth.loginWithPopup();
@@ -20,6 +22,20 @@ function Navbar({ setDomainData }) {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  const connectMetamask = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+
+    const provider = new ethers.providers.Web3Provider(connection);  
+    console.log(provider);
+
+    const signer = provider.getSigner();
+    setUserSigner(signer);
+
+    const address = await signer.getAddress();
+    setETHAddress(address);
   }
 
   return (
@@ -38,8 +54,14 @@ function Navbar({ setDomainData }) {
       <Link href="/create-coupon">
         Create Coupon
       </Link>
+      <Link href="/chat">
+        Chat
+      </Link>
       <button onClick={loginWithUnstoppableDomains}>
         Login with Unstoppable
+      </button>
+      <button onClick={connectMetamask}>
+        {ethAddress ? ethAddress : "Connect Wallet"}
       </button>
       <br />
       <br />
