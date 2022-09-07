@@ -20,7 +20,9 @@
     "web3modal": "^1.9.9"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
     "eslint": "8.23.0",
-    "eslint-config-next": "12.2.5"
+    "eslint-config-next": "12.2.5",
+    "hardhat": "^2.11.1"
   }
 }
