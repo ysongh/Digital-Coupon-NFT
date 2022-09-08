@@ -3,7 +3,7 @@ import { Web3Storage } from 'web3.storage';
 
 const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_APIKEY });
 
-function CreateCoupon() {
+function CreateCoupon({ dcContract }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState(null);
@@ -11,6 +11,7 @@ function CreateCoupon() {
   const [discount, setDiscount] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cid, setCid] = useState(null);
+  const [transactionHash, setTransactionHash] = useState('');
 
   const handleUpload = async (event) => {
     const image = event.target.files[0];
@@ -37,6 +38,11 @@ function CreateCoupon() {
 
       console.log(`https://dweb.link/ipfs/${cid}`);
       setCid(`https://dweb.link/ipfs/${cid}`);
+
+      const transaction = await dcContract.createCoupon(`https://dweb.link/ipfs/${cid}`);
+      const tx = await transaction.wait();
+      console.log(tx);
+      setTransactionHash(tx.transactionHash);
 
       setLoading(false);
     } catch(error) {
@@ -69,6 +75,12 @@ function CreateCoupon() {
        : <p>Loading...</p>
       }
       <p>{cid}</p>
+      {transactionHash &&
+          <p>
+            Success, {" "}
+            {transactionHash.substring(0, 10) + '...' + transactionHash.substring(56, 66)}
+          </p>
+        }
     </div>
   )
 }

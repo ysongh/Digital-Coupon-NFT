@@ -5,6 +5,7 @@ function MyApp({ Component, pageProps }) {
   const [ethAddress, setETHAddress] = useState('');
   const [userSigner, setUserSigner] = useState(null);
   const [domainData, setDomainData] = useState(null);
+  const [dcContract, setDCContract] = useState(null);
 
   return (
     <div>
@@ -13,11 +14,13 @@ function MyApp({ Component, pageProps }) {
         ethAddress={ethAddress}
         setDomainData={setDomainData}
         setETHAddress={setETHAddress}
-        setUserSigner={setUserSigner} />
+        setUserSigner={setUserSigner}
+        setDCContract={setDCContract} />
       <Component
         {...pageProps}
         userSigner={userSigner}
-        domainData={domainData} />
+        domainData={domainData}
+        dcContract={dcContract} />
     </div>
   )
 }

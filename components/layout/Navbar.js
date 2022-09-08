@@ -4,13 +4,15 @@ import UAuth from '@uauth/js';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
 
+import DigitalCoupon from '../../artifacts/contracts/DigitalCoupon.sol/DigitalCoupon.json';
+
 const uauth = new UAuth({
   clientID: process.env.NEXT_PUBLIC_UNSTOPPABLEDOMAINS_CLIENTID,
   redirectUri: process.env.NEXT_PUBLIC_UNSTOPPABLEDOMAINS_REDIRECT_URI,
   scope: "openid wallet"
 });
 
-function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner }) {
+function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDCContract }) {
   const loginWithUnstoppableDomains = async () => {
     try {
       const authorization = await uauth.loginWithPopup();
@@ -36,6 +38,9 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner }) {
 
     const address = await signer.getAddress();
     setETHAddress(address);
+
+    const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCoupon.abi, signer);
+    setDCContract(contract);
   }
 
   return (

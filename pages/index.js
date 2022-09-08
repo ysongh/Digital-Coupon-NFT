@@ -1,10 +1,50 @@
-import styles from '../styles/Home.module.css';
+import React, { useEffect, useState } from 'react';
 
-export default function Home({ domainData }) {
+export default function Home({ domainData, dcContract }) {
+  const [coupons, setCoupons] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (dcContract) fetchCoupons();
+  }, [dcContract])
+
+  const fetchCoupons = async () => {
+    try{
+      setLoading(true);
+
+      const _counpons = await dcContract.getCoupons();
+      console.log(_counpons);
+
+      const temp = [];
+      for (let c of _counpons) {
+        const res = await fetch(c.cid + "/couponData.json");
+        const couponData = await res.json();
+        console.log(couponData); 
+        temp.push({...c, couponData});
+      }
+      setCoupons(temp);
+
+      setLoading(false);
+    } catch(error) {
+     console.error(error);
+     setLoading(false);
+    }  
+  }
+  
   return (
-    <div className={styles.container}>
+    <div>
       <p>{JSON.stringify(domainData)}</p>
+      {loading
+        ? <p>Loading...</p>
+        : coupons.map(c => (
+          <div>
+            <img src={c.cid + "/" + c.couponData.photoName} alt="Product" style={{ width: "200px"}} />
+            <p>{c.couponData.title}</p>
+            <p>${c.couponData.price}</p>
+            <p>{c.couponData.discount}</p>
+            <p>{c.owner}</p>
+          </div>
+        ))}
     </div>
   )
 }
