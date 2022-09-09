@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Home({ domainData, dcContract }) {
+  const router = useRouter();
+
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -37,12 +40,15 @@ export default function Home({ domainData, dcContract }) {
       {loading
         ? <p>Loading...</p>
         : coupons.map(c => (
-          <div>
+          <div key={c.tokenId.toString()}>
             <img src={c.cid + "/" + c.couponData.photoName} alt="Product" style={{ width: "200px"}} />
             <p>{c.couponData.title}</p>
             <p>${c.couponData.price}</p>
             <p>{c.couponData.discount}</p>
             <p>{c.owner}</p>
+            <button onClick={() => router.push(`/coupon/${c.tokenId.toString()}`)}>
+              View 
+            </button>
           </div>
         ))}
     </div>
