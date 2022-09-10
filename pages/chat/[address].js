@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { Client } from '@xmtp/xmtp-js';
 
 function Chat({ userSigner }) {
+  const router = useRouter();
+  const { address } = router.query;
+
   const [xmtpMethod, setxmtpMethod] = useState(null);
   const [conversationMethod, setconversationMethod] = useState(null);
   const [messagesList, setMessagesList] = useState([]);
@@ -12,6 +16,7 @@ function Chat({ userSigner }) {
     const xmtp = await Client.create(userSigner);
     console.log(xmtp);
     setxmtpMethod(xmtp);
+    setToAddress(address);
   }
 
   const chatWith = async () => {
@@ -39,7 +44,7 @@ function Chat({ userSigner }) {
         : <div>
             <h2>Chat</h2>
             <label htmlFor="address">Address to Chat With</label>
-            <input id="address" onChange={(e) => setToAddress(e.target.value)}/>
+            <input id="address" value={address} onChange={(e) => setToAddress(e.target.value)}/>
             <button onClick={chatWith}>
               Chat
             </button>

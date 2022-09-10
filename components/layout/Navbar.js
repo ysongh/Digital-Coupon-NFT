@@ -40,8 +40,8 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
     const address = await signer.getAddress();
     setETHAddress(address);
 
-    // const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCoupon.abi, signer);
-    // setDCContract(contract);
+    const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCoupon.abi, signer);
+    setDCContract(contract);
 
     const sf = await Framework.create({
       chainId: 80001,
@@ -67,9 +67,6 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
       </Link>
       <Link href="/create-coupon">
         Create Coupon
-      </Link>
-      <Link href="/chat">
-        Chat
       </Link>
       <button onClick={loginWithUnstoppableDomains}>
         Login with Unstoppable

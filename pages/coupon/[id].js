@@ -70,6 +70,9 @@ export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
       <button onClick={streamDai}>
        Stream DAI
       </button>
+      <button onClick={() => router.push(`/chat/${coupon.owner}`)}>
+        Chat 
+      </button>
       {showSFLink && <a href={`https://app.superfluid.finance/`} target="_blank" rel="noopener noreferrer">
         View Dashboard
       </a>}
