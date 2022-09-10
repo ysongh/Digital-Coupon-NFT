@@ -6,6 +6,7 @@ function MyApp({ Component, pageProps }) {
   const [userSigner, setUserSigner] = useState(null);
   const [domainData, setDomainData] = useState(null);
   const [dcContract, setDCContract] = useState(null);
+  const [sfMethods, setsfMethods] = useState(null);
 
   return (
     <div>
@@ -15,12 +16,14 @@ function MyApp({ Component, pageProps }) {
         setDomainData={setDomainData}
         setETHAddress={setETHAddress}
         setUserSigner={setUserSigner}
-        setDCContract={setDCContract} />
+        setDCContract={setDCContract}
+        setsfMethods={setsfMethods} />
       <Component
         {...pageProps}
         userSigner={userSigner}
         domainData={domainData}
-        dcContract={dcContract} />
+        dcContract={dcContract}
+        sfMethods={sfMethods} />
     </div>
   )
 }

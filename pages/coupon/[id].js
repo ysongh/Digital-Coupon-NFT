@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-export default function CouponDetail({ dcContract }) {
+export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
   const router = useRouter();
   const { id } = router.query;
 
   const [coupon, setCoupon] = useState({});
+  const [showSFLink, setShowSFLink] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -31,6 +32,28 @@ export default function CouponDetail({ dcContract }) {
      setLoading(false);
     }  
   }
+
+  const streamDai = async () => {
+    try {
+      const DAIxContract = await sfMethods.loadSuperToken("fDAIx");
+      const DAIx = DAIxContract.address;
+      console.log(DAIx);
+
+      const createFlowOperation = sfMethods.cfaV1.createFlow({
+        receiver: coupon.owner,
+        flowRate: "1",
+        superToken: DAIx,
+      });
+
+      console.log("Creating your stream...");
+
+      const result = await createFlowOperation.exec(userSigner);
+      console.log(result);
+      setShowSFLink(true);
+    } catch (error) {
+      console.error(error);
+    }
+  } 
   
   return (
     <div>
@@ -44,6 +67,12 @@ export default function CouponDetail({ dcContract }) {
             <p>{coupon?.couponData?.discount}</p>
             <p>{coupon.owner}</p>
           </div>}
+      <button onClick={streamDai}>
+       Stream DAI
+      </button>
+      {showSFLink && <a href={`https://app.superfluid.finance/`} target="_blank" rel="noopener noreferrer">
+        View Dashboard
+      </a>}
     </div>
   )
 }

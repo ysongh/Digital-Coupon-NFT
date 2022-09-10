@@ -3,6 +3,7 @@ import Link from 'next/link';
 import UAuth from '@uauth/js';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
+import { Framework } from "@superfluid-finance/sdk-core";
 
 import DigitalCoupon from '../../artifacts/contracts/DigitalCoupon.sol/DigitalCoupon.json';
 
@@ -12,7 +13,7 @@ const uauth = new UAuth({
   scope: "openid wallet"
 });
 
-function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDCContract }) {
+function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDCContract, setsfMethods }) {
   const loginWithUnstoppableDomains = async () => {
     try {
       const authorization = await uauth.loginWithPopup();
@@ -39,8 +40,16 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
     const address = await signer.getAddress();
     setETHAddress(address);
 
-    const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCoupon.abi, signer);
-    setDCContract(contract);
+    // const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCoupon.abi, signer);
+    // setDCContract(contract);
+
+    const sf = await Framework.create({
+      chainId: 80001,
+      provider: provider
+    });
+    console.log(sf);
+
+    setsfMethods(sf);
   }
 
   return (
