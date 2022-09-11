@@ -16,6 +16,7 @@ const uauth = new UAuth({
 
 function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDCContract, setsfMethods }) {
   const [balance, setBalance] = useState('');
+  const [chainName, setChainName] = useState('');
 
   const loginWithUnstoppableDomains = async () => {
     try {
@@ -40,22 +41,28 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
     const signer = provider.getSigner();
     setUserSigner(signer);
 
+    const { chainId } = await provider.getNetwork();
+    console.log(chainId)
+
     const address = await signer.getAddress();
     setETHAddress(address);
 
     const _balance = await provider.getBalance(address);
     setBalance(_balance.toString());
 
-    const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCoupon.abi, signer);
-    setDCContract(contract);
-
-    const sf = await Framework.create({
-      chainId: 80001,
-      provider: provider
-    });
-    console.log(sf);
-
-    setsfMethods(sf);
+    if(chainId === 647426021){
+      const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCoupon.abi, signer);
+      setDCContract(contract);
+      setChainName("Skale");
+    }
+    else if(chainId === 80001){
+      const sf = await Framework.create({
+        chainId: 80001,
+        provider: provider
+      });
+      console.log(sf);
+      setsfMethods(sf);
+    }
   }
 
   return (
@@ -80,7 +87,7 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
       <button onClick={connectMetamask}>
         {ethAddress ? ethAddress : "Connect Wallet"}
       </button>
-      <p>{balance / 10 ** 18} ETH</p>
+      <p>{chainName} {balance / 10 ** 18} ETH</p>
       <br />
       <br />
     </div>
