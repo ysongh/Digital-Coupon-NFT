@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import UAuth from '@uauth/js';
@@ -14,6 +15,8 @@ const uauth = new UAuth({
 });
 
 function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDCContract, setsfMethods }) {
+  const [balance, setBalance] = useState('');
+
   const loginWithUnstoppableDomains = async () => {
     try {
       const authorization = await uauth.loginWithPopup();
@@ -39,6 +42,9 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
 
     const address = await signer.getAddress();
     setETHAddress(address);
+
+    const _balance = await provider.getBalance(address);
+    setBalance(_balance.toString());
 
     const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCoupon.abi, signer);
     setDCContract(contract);
@@ -74,6 +80,7 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
       <button onClick={connectMetamask}>
         {ethAddress ? ethAddress : "Connect Wallet"}
       </button>
+      <p>{balance / 10 ** 18} ETH</p>
       <br />
       <br />
     </div>
