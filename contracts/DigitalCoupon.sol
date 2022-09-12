@@ -40,4 +40,28 @@ contract DigitalCoupon {
 
         return coupons;
     }
+
+    function getOwnerCoupons(address _ownerAddress) public view returns (Coupon[] memory) {
+        uint itemCount = 0;
+        uint currentIndex = 0;
+
+        for (uint i = 0; i < totalCoupon; i++) {
+            if (couponList[i].owner == _ownerAddress) {
+                itemCount += 1;
+            }
+        }
+
+        Coupon[] memory coupons = new Coupon[](itemCount);
+
+        for (uint i = 0; i < totalCoupon; i++) {
+            if (couponList[i].owner == _ownerAddress) {
+                uint currentId = i;
+                Coupon memory currentCoupon = couponList[currentId];
+                coupons[currentIndex] = currentCoupon;
+                currentIndex += 1;
+            }
+        }
+
+        return coupons;   
+    }
 }
