@@ -78,6 +78,9 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
       <Link href="/">
         Home
       </Link>
+      <Link href="/my-coupons">
+        My Coupons
+      </Link>
       <Link href="/create-coupon">
         Create Coupon
       </Link>

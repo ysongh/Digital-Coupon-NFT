@@ -20,6 +20,7 @@ function MyApp({ Component, pageProps }) {
         setsfMethods={setsfMethods} />
       <Component
         {...pageProps}
+        ethAddress={ethAddress}
         userSigner={userSigner}
         domainData={domainData}
         dcContract={dcContract}
