@@ -43,8 +43,8 @@ export default function MyCoupons({ ethAddress, dcContract }) {
             <img src={c.cid + "/" + c.couponData.photoName} alt="Product" style={{ width: "200px"}} />
             <p>{c.couponData.title}</p>
             <p>${c.couponData.price}</p>
-            <p>{c.couponData.discount}</p>
-            <p>{c.owner}</p>
+            <p>{c.couponData.discount} Off</p>
+            <p>Expire in {c.expireDate.toString()}</p>
             <button onClick={() => router.push(`/coupon/${c.tokenId.toString()}`)}>
               View 
             </button>

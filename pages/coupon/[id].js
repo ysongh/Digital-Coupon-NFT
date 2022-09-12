@@ -64,8 +64,9 @@ export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
             <p>{coupon?.couponData?.title}</p>
             <p>{coupon?.couponData?.description}</p>
             <p>${coupon?.couponData?.price}</p>
-            <p>{coupon?.couponData?.discount}</p>
-            <p>{coupon.owner}</p>
+            <p>{coupon?.couponData?.discount} Off</p>
+            <p>Expire in {coupon?.expireDate?.toString()}</p>
+            <p>From {coupon.owner}</p>
           </div>}
       <button onClick={streamDai}>
        Stream DAI

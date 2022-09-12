@@ -9,6 +9,7 @@ function CreateCoupon({ dcContract }) {
   const [photo, setPhoto] = useState(null);
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState(null);
+  const [days, setDays] = useState("");
   const [loading, setLoading] = useState(false);
   const [cid, setCid] = useState(null);
   const [transactionHash, setTransactionHash] = useState('');
@@ -39,7 +40,7 @@ function CreateCoupon({ dcContract }) {
       console.log(`https://dweb.link/ipfs/${cid}`);
       setCid(`https://dweb.link/ipfs/${cid}`);
 
-      const transaction = await dcContract.createCoupon(`https://dweb.link/ipfs/${cid}`);
+      const transaction = await dcContract.createCoupon(`https://dweb.link/ipfs/${cid}`, days);
       const tx = await transaction.wait();
       console.log(tx);
       setTransactionHash(tx.transactionHash);
@@ -61,6 +62,9 @@ function CreateCoupon({ dcContract }) {
       <br />
       <span>Choose profile photo</span>
       <input type="file" id="photo" onChange={handleUpload}/>
+      <br />
+      <label htmlFor="Expire Date">Number of Days for expire</label>
+      <input id="Expire Date" onChange={(e) => setDays(e.target.value)}/>
       <br />
       <label htmlFor="price">Price</label>
       <input id="price" onChange={(e) => setPrice(e.target.value)}/>

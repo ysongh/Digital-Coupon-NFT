@@ -10,16 +10,22 @@ contract DigitalCoupon {
         uint tokenId;
         string cid;
         string tablelandId;
+        uint expireDate;
         address owner;
     }
 
-    event CouponCreated (uint tokenId, string cid, address owner);
+    event CouponCreated (uint tokenId, string cid, uint expireDate, address owner);
 
-    constructor() {}
+    constructor() {
+        createCoupon("https://dweb.link/ipfs/bafybeihcfd2bojowzxy6frpl54xqyt6cpk2wlp52avpetgj7yrcgx3m7ky", 7);
+        createCoupon("https://dweb.link/ipfs/bafybeigqj4in4bpiovytwo6ubsjc2myek6psciscszyozch3jlzs2hv3ra", 10);
+    }
 
-    function createCoupon(string memory _cid) public returns (uint) {
-        couponList[totalCoupon] = Coupon(totalCoupon, _cid, "", msg.sender);
-        emit CouponCreated(totalCoupon, _cid, msg.sender);
+    function createCoupon(string memory _cid, uint _timeAmount) public returns (uint) {
+        uint _expireDate = block.timestamp + _timeAmount * 1 days;
+
+        couponList[totalCoupon] = Coupon(totalCoupon, _cid, "", _expireDate, msg.sender);
+        emit CouponCreated(totalCoupon, _cid, _expireDate, msg.sender);
         totalCoupon++;
 
         return totalCoupon - 1;
