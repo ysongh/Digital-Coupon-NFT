@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+import { getDate } from '../../utils/date';
+
 export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
   const router = useRouter();
   const { id } = router.query;
@@ -65,7 +67,7 @@ export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
             <p>{coupon?.couponData?.description}</p>
             <p>${coupon?.couponData?.price}</p>
             <p>{coupon?.couponData?.discount} Off</p>
-            <p>Expire in {coupon?.expireDate?.toString()}</p>
+            <p>Expire in {getDate(coupon?.expireDate?.toString())}</p>
             <p>From {coupon.owner}</p>
           </div>}
       <button onClick={streamDai}>

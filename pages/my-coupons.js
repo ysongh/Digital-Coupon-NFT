@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+import { getDate } from '../utils/date';
+
 export default function MyCoupons({ ethAddress, dcContract }) {
   const router = useRouter();
 
@@ -44,7 +46,7 @@ export default function MyCoupons({ ethAddress, dcContract }) {
             <p>{c.couponData.title}</p>
             <p>${c.couponData.price}</p>
             <p>{c.couponData.discount} Off</p>
-            <p>Expire in {c.expireDate.toString()}</p>
+            <p>Expire in {getDate(c.expireDate.toString())}</p>
             <button onClick={() => router.push(`/coupon/${c.tokenId.toString()}`)}>
               View 
             </button>
