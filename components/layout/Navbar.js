@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import UAuth from '@uauth/js';
-import { Box, Container, Flex, Spacer, Button } from '@chakra-ui/react';
+import { Box, Container, Flex, Spacer, Link, Button } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
 import { Framework } from "@superfluid-finance/sdk-core";
@@ -76,19 +76,19 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
       <Container maxW='1300px' p={2}>
         <Flex minWidth='max-content' alignItems='center' gap='2'>
           <Box p='2'>
-            <Link href="/">
+            <NextLink href='/' passHref>
               <img src="/logo.png" alt="Logo" style={{ width: "200px" }}/>
-            </Link>
+            </NextLink>
           </Box>
-          <Link href="/">
-            Home
-          </Link>
-          <Link href="/my-coupons">
-            My Coupons
-          </Link>
-          <Link href="/create-coupon">
-            Create Coupon
-          </Link>
+          <NextLink href='/' passHref>
+            <Link>Home</Link>
+          </NextLink>
+          <NextLink href='/my-coupons' passHref>
+            <Link>My Coupons</Link>
+          </NextLink>
+          <NextLink href='/create-coupon' passHref>
+            <Link>Create Coupon</Link>
+          </NextLink>
           <Spacer />
           {ethAddress && <p>{chainName} {balance / 10 ** 18} ETH</p>}
           <Button colorScheme='orange' onClick={loginWithUnstoppableDomains}>
