@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
 import Navbar from '../components/layout/Navbar';
 
 function MyApp({ Component, pageProps }) {
@@ -9,7 +10,7 @@ function MyApp({ Component, pageProps }) {
   const [sfMethods, setsfMethods] = useState(null);
 
   return (
-    <div>
+    <ChakraProvider>
       <Navbar
         domainData={domainData}
         ethAddress={ethAddress}
@@ -25,7 +26,7 @@ function MyApp({ Component, pageProps }) {
         domainData={domainData}
         dcContract={dcContract}
         sfMethods={sfMethods} />
-    </div>
+    </ChakraProvider>
   )
 }
 

@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { Web3Storage } from 'web3.storage';
+import { FormControl, FormLabel, Box, ButtonGroup, Spinner, Input, Heading, Button } from '@chakra-ui/react';
 
 const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_APIKEY });
 
 function CreateCoupon({ dcContract }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const router = useRouter();
+
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState(null);
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState('');
   const [discount, setDiscount] = useState(null);
-  const [days, setDays] = useState("");
+  const [days, setDays] = useState('');
   const [loading, setLoading] = useState(false);
   const [cid, setCid] = useState(null);
   const [transactionHash, setTransactionHash] = useState('');
@@ -26,7 +30,7 @@ function CreateCoupon({ dcContract }) {
 
       console.log(title, description, photo, price, discount);
       const couponData = JSON.stringify({ title, description, photoName: photo.name, price, discount });
-      const blob = new Blob([couponData], {type: "text/plain"});
+      const blob = new Blob([couponData], {type: 'text/plain'});
       const couponDataFile = new File([ blob ], 'couponData.json');
 
       const cid = await client.put([couponDataFile, photo], {
@@ -54,37 +58,53 @@ function CreateCoupon({ dcContract }) {
 
   return (
     <div>
-      <label htmlFor="title">Title</label>
-      <input id="title" onChange={(e) => setTitle(e.target.value)}/>
-      <br />
-      <label htmlFor="description">Description</label>
-      <input id="description" onChange={(e) => setDescription(e.target.value)}/>
-      <br />
-      <span>Choose profile photo</span>
-      <input type="file" id="photo" onChange={handleUpload}/>
-      <br />
-      <label htmlFor="Expire Date">Number of Days for expire</label>
-      <input id="Expire Date" onChange={(e) => setDays(e.target.value)}/>
-      <br />
-      <label htmlFor="price">Price</label>
-      <input id="price" onChange={(e) => setPrice(e.target.value)}/>
-      <br />
-      <label htmlFor="discount">Discount</label>
-      <input id="discount" onChange={(e) => setDiscount(e.target.value)}/>
-      <br />
-      {!loading
-        ? <button onClick={handleSubmit}>
-            Create
-          </button>
-       : <p>Loading...</p>
-      }
-      <p>{cid}</p>
-      {transactionHash &&
-          <p>
-            Success, {" "}
-            {transactionHash.substring(0, 10) + '...' + transactionHash.substring(56, 66)}
-          </p>
-        }
+      <center>
+        <Box borderWidth='1px' borderRadius='lg' borderColor='orange' overflow='hidden' p='5' width='500px' mt='5'>
+          <Heading fontSize='2xl' mb='3'>Create Coupon</Heading>
+          <FormControl mb='3'>
+            <FormLabel htmlFor='title'>Title</FormLabel>
+            <Input id='title' onChange={(e) => setTitle(e.target.value)}/>
+          </FormControl>
+          <FormControl mb='3'>
+            <FormLabel htmlFor='description'>Description</FormLabel>
+            <Input id='description' onChange={(e) => setDescription(e.target.value)}/>
+          </FormControl>
+          <FormControl mb='3'>
+            <FormLabel htmlFor='description'>Choose Photo</FormLabel>
+            <input type='file' id='photo' onChange={handleUpload}/>
+          </FormControl>
+          <FormControl mb='3'>
+            <FormLabel htmlFor='Expire Date'>Number of Days for expire</FormLabel>
+            <Input id='Expire Date' onChange={(e) => setDays(e.target.value)}/>
+          </FormControl>
+          <FormControl mb='3'>
+            <FormLabel htmlFor='price'>Price</FormLabel>
+            <Input id='price' onChange={(e) => setPrice(e.target.value)}/>
+          </FormControl>
+          <FormControl mb='5'>
+            <FormLabel htmlFor='discount'>Discount</FormLabel>
+            <Input id='discount' onChange={(e) => setDiscount(e.target.value)}/>
+          </FormControl>
+          {loading
+            ? <Spinner color='orange' />
+            : <ButtonGroup spacing='6'>
+                <Button colorScheme='orange' onClick={handleSubmit}>
+                  Create
+                </Button>
+                <Button onClick={() => router.push('/')}>Cancel</Button>
+              </ButtonGroup>
+          }
+          <br />
+          <br />
+          <p>{cid}</p>
+          {transactionHash &&
+            <p>
+              Success, {' '}
+              {transactionHash.substring(0, 10) + '...' + transactionHash.substring(56, 66)}
+            </p>
+          }
+        </Box>
+      </center>
     </div>
   )
 }

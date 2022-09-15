@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import UAuth from '@uauth/js';
+import { Box, Container, Flex, Spacer, Button } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
 import { Framework } from "@superfluid-finance/sdk-core";
@@ -71,28 +72,33 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
         <title>Digital Coupon NFT</title>
         <meta name="description" content="Digital Coupon NFT" />
         <link rel="icon" href="/favicon.ico" />
-      </Head> 
-      <Link href="/">
-        <img src="/logo.png" alt="Logo" style={{ width: "250px" }}/>
-      </Link>
-      <Link href="/">
-        Home
-      </Link>
-      <Link href="/my-coupons">
-        My Coupons
-      </Link>
-      <Link href="/create-coupon">
-        Create Coupon
-      </Link>
-      <button onClick={loginWithUnstoppableDomains}>
-        Login with Unstoppable
-      </button>
-      <button onClick={connectMetamask}>
-        {ethAddress ? ethAddress : "Connect Wallet"}
-      </button>
-      <p>{chainName} {balance / 10 ** 18} ETH</p>
-      <br />
-      <br />
+      </Head>
+      <Container maxW='1300px' p={2}>
+        <Flex minWidth='max-content' alignItems='center' gap='2'>
+          <Box p='2'>
+            <Link href="/">
+              <img src="/logo.png" alt="Logo" style={{ width: "200px" }}/>
+            </Link>
+          </Box>
+          <Link href="/">
+            Home
+          </Link>
+          <Link href="/my-coupons">
+            My Coupons
+          </Link>
+          <Link href="/create-coupon">
+            Create Coupon
+          </Link>
+          <Spacer />
+          {ethAddress && <p>{chainName} {balance / 10 ** 18} ETH</p>}
+          <Button colorScheme='orange' onClick={loginWithUnstoppableDomains}>
+            Login with Unstoppable
+          </Button>
+          <Button colorScheme='orange' onClick={connectMetamask}>
+            {ethAddress ? ethAddress : "Connect Wallet"}
+          </Button>
+        </Flex>
+      </Container>
     </div>
   )
 }

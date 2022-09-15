@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { Container, SimpleGrid, Box, Flex, Center, Spacer, Image, Heading, Button, Text } from '@chakra-ui/react';
 
 import { getDate } from '../utils/date';
 
@@ -37,22 +38,28 @@ export default function Home({ domainData, dcContract }) {
   }
   
   return (
-    <div>
+    <Container maxW='1100px' mt='3'>
       <p>{JSON.stringify(domainData)}</p>
+      <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
       {loading
         ? <p>Loading...</p>
         : coupons.map(c => (
-          <div key={c.tokenId.toString()}>
-            <img src={c.cid + "/" + c.couponData.photoName} alt="Product" style={{ width: "200px"}} />
-            <p>{c.couponData.title}</p>
-            <p>${c.couponData.price}</p>
-            <p>{c.couponData.discount} Off</p>
-            <p>Expire in {getDate(c.expireDate.toString())}</p>
-            <button onClick={() => router.push(`/coupon/${c.tokenId.toString()}`)}>
-              View 
-            </button>
-          </div>
+            <Box key={c.tokenId.toString()} borderWidth='1px' borderRadius='lg' overflow='hidden' p='4'>
+              <Image src={c.cid + "/" + c.couponData.photoName} alt="Product" />
+              <Flex>
+                <Heading fontSize='lg' mt='3' mb='3'>{c.couponData.title}</Heading>
+                <Spacer />
+                <Center>
+                  <Text mb='2' fontSize='md'>{c.couponData.discount} Off</Text>
+                </Center>
+              </Flex>
+              <Text>Expire in {getDate(c.expireDate.toString())}</Text>
+              <Button mt='2' colorScheme='orange' onClick={() => router.push(`/coupon/${c.tokenId.toString()}`)}>
+                View 
+              </Button>
+            </Box>
         ))}
-    </div>
+      </SimpleGrid>
+    </Container>
   )
 }

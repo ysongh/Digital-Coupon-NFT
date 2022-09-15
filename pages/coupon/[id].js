@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { Container, SimpleGrid, ButtonGroup, Image, Heading, Button, Text } from '@chakra-ui/react';
 
 import { getDate } from '../../utils/date';
 
@@ -58,27 +59,33 @@ export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
   } 
   
   return (
-    <div>
+    <Container maxW='1300px' mt='3'>
       {loading
         ? <p>Loading...</p>
-        : <div>
-            <img src={coupon.cid + "/" + coupon?.couponData?.photoName} alt="Product" style={{ width: "200px"}} />
-            <p>{coupon?.couponData?.title}</p>
-            <p>{coupon?.couponData?.description}</p>
-            <p>${coupon?.couponData?.price}</p>
-            <p>{coupon?.couponData?.discount} Off</p>
-            <p>Expire in {getDate(coupon?.expireDate?.toString())}</p>
-            <p>From {coupon.owner}</p>
-          </div>}
-      <button onClick={streamDai}>
-       Stream DAI
-      </button>
-      <button onClick={() => router.push(`/chat/${coupon.owner}`)}>
-        Chat 
-      </button>
+        :  <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
+            <Image src={coupon.cid + "/" + coupon?.couponData?.photoName} alt='Product' />
+            <div>
+              <Heading fontSize='2xl'>{coupon?.couponData?.title}</Heading>
+              <Text>{coupon?.couponData?.description}</Text>
+              <p>${coupon?.couponData?.price}</p>
+              <p>{coupon?.couponData?.discount} Off</p>
+              <p>Expire in {getDate(coupon?.expireDate?.toString())}</p>
+              <p>From {coupon.owner}</p>
+            </div>
+          </SimpleGrid>
+        }
+      <ButtonGroup spacing='3'>
+        <Button colorScheme='orange' onClick={streamDai}>
+          Stream DAI
+        </Button>
+        <Button colorScheme='orange' onClick={() => router.push(`/chat/${coupon.owner}`)}>
+          Chat
+        </Button>
+      </ButtonGroup>
+
       {showSFLink && <a href={`https://app.superfluid.finance/`} target="_blank" rel="noopener noreferrer">
         View Dashboard
       </a>}
-    </div>
+    </Container>
   )
 }
