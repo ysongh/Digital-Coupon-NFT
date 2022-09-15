@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { Container, SimpleGrid } from '@chakra-ui/react';
 
-import { getDate } from '../utils/date';
+import CouponCard from '../components/CouponCard';
 
 export default function MyCoupons({ ethAddress, dcContract }) {
-  const router = useRouter();
-
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -37,21 +35,13 @@ export default function MyCoupons({ ethAddress, dcContract }) {
   }
   
   return (
-    <div>
+    <Container maxW='1100px' mt='3'>
+      <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
       {loading
         ? <p>Loading...</p>
-        : coupons.map(c => (
-          <div key={c.tokenId.toString()}>
-            <img src={c.cid + "/" + c.couponData.photoName} alt="Product" style={{ width: "200px"}} />
-            <p>{c.couponData.title}</p>
-            <p>${c.couponData.price}</p>
-            <p>{c.couponData.discount} Off</p>
-            <p>Expire in {getDate(c.expireDate.toString())}</p>
-            <button onClick={() => router.push(`/coupon/${c.tokenId.toString()}`)}>
-              View 
-            </button>
-          </div>
-        ))}
-    </div>
+        : coupons.map(c => <CouponCard key={c.tokenId.toString()} c={c} />
+        )}
+      </SimpleGrid>
+    </Container>
   )
 }
