@@ -39,7 +39,7 @@ export default function MyCoupons({ ethAddress, dcContract }) {
       <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
       {loading
         ? <p>Loading...</p>
-        : coupons.map(c => <CouponCard key={c.tokenId.toString()} c={c} />
+        : coupons.map(c => <CouponCard key={c.couponId.toString()} c={c} />
         )}
       </SimpleGrid>
     </Container>

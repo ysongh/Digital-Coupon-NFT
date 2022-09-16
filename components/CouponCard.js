@@ -18,7 +18,7 @@ function CouponCard({ c }) {
         </Center>
       </Flex>
       <Text>Expire in {getDate(c.expireDate.toString())}</Text>
-      <Button mt='2' colorScheme='orange' onClick={() => router.push(`/coupon/${c.tokenId.toString()}`)}>
+      <Button mt='2' colorScheme='orange' onClick={() => router.push(`/coupon/${c.couponId.toString()}`)}>
         View 
       </Button>
     </Box>

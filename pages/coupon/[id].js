@@ -4,16 +4,21 @@ import { Container, SimpleGrid, ButtonGroup, Image, Heading, Button, Text } from
 
 import { getDate } from '../../utils/date';
 
-export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
+export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMethods }) {
   const router = useRouter();
   const { id } = router.query;
 
   const [coupon, setCoupon] = useState({});
   const [showSFLink, setShowSFLink] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [referCount, setReferCount] = useState("");
 
   useEffect(() => {
     if (dcContract) fetchCoupon();
+  }, [dcContract])
+
+  useEffect(() => {
+    if (dcContract) fetchReferrer();
   }, [dcContract])
 
   const fetchCoupon = async () => {
@@ -28,6 +33,21 @@ export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
       console.log(couponData); 
 
       setCoupon({..._counpon, couponData});
+
+      setLoading(false);
+    } catch(error) {
+     console.error(error);
+     setLoading(false);
+    }  
+  }
+
+  const fetchReferrer = async () => {
+    try{
+      setLoading(true);
+
+      const referrer = await dcContract.getAddressFromReferrer(id, ethAddress);
+      console.log(referrer);
+      setReferCount(referrer.length);
 
       setLoading(false);
     } catch(error) {
@@ -56,7 +76,27 @@ export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
     } catch (error) {
       console.error(error);
     }
-  } 
+  }
+
+  const createReferrer = async () => {
+    try {
+      const transaction = await dcContract.createReferrer(id);
+      const tx = await transaction.wait();
+      console.log(tx);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const buyProduct = async () => {
+    try {
+      const transaction = await dcContract.addRefer(id, ethAddress);
+      const tx = await transaction.wait();
+      console.log(tx);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   
   return (
     <Container maxW='1300px' mt='3'>
@@ -71,6 +111,9 @@ export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
               <p>{coupon?.couponData?.discount} Off</p>
               <p>Expire in {getDate(coupon?.expireDate?.toString())}</p>
               <p>From {coupon.owner}</p>
+              <Button colorScheme='orange' onClick={buyProduct} mt='3'>
+                Buy it
+              </Button>
             </div>
           </SimpleGrid>
         }
@@ -81,7 +124,11 @@ export default function CouponDetail({ userSigner, dcContract, sfMethods }) {
         <Button colorScheme='orange' onClick={() => router.push(`/chat/${coupon.owner}`)}>
           Chat
         </Button>
+        <Button colorScheme='orange' onClick={createReferrer}>
+          Be Referrer
+        </Button>
       </ButtonGroup>
+      <Text mt='3'>{referCount} Refers</Text>
 
       {showSFLink && <a href={`https://app.superfluid.finance/`} target="_blank" rel="noopener noreferrer">
         View Dashboard
