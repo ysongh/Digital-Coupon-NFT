@@ -91,11 +91,11 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
           </NextLink>
           <Spacer />
           {ethAddress && <p>{chainName} {balance / 10 ** 18} ETH</p>}
-          <Button colorScheme='orange' onClick={loginWithUnstoppableDomains}>
+          {!ethAddress && <Button colorScheme='orange' onClick={loginWithUnstoppableDomains}>
             Login with Unstoppable
-          </Button>
+          </Button>}
           <Button colorScheme='orange' onClick={connectMetamask}>
-            {ethAddress ? ethAddress : "Connect Wallet"}
+            {ethAddress ? ethAddress.substring(0, 5) + '...' + ethAddress.substring(36, 42) : 'Connect Wallet'}
           </Button>
         </Flex>
       </Container>
