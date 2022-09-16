@@ -5,16 +5,22 @@ contract DigitalCoupon {
     uint public totalCoupon = 0;
 
     mapping(uint => Coupon) public couponList;
+    mapping(address => mapping(uint => Referrer)) public referrersList;
 
     struct Coupon {
-        uint tokenId;
+        uint couponId;
         string cid;
         string tablelandId;
         uint expireDate;
         address owner;
     }
 
-    event CouponCreated (uint tokenId, string cid, uint expireDate, address owner);
+    struct Referrer {
+        uint couponId;
+        address[] users;
+    }
+
+    event CouponCreated (uint couponId, string cid, uint expireDate, address owner);
 
     constructor() {
         createCoupon("https://dweb.link/ipfs/bafybeihcfd2bojowzxy6frpl54xqyt6cpk2wlp52avpetgj7yrcgx3m7ky", 7);
@@ -31,9 +37,19 @@ contract DigitalCoupon {
         return totalCoupon - 1;
     }
 
+    function createReferrer(uint _couponId) external {
+        referrersList[msg.sender][_couponId] = Referrer(_couponId, new address[](0));
+        referrersList[msg.sender][_couponId].users.push(msg.sender);
+    }
+
     function setTablelandId(uint _id, string memory _tablelandId) public {
         Coupon storage currentCoupon = couponList[_id];
         currentCoupon.tablelandId = _tablelandId;
+    }
+
+    function addRefer(uint _couponId, address _referrerAddress) external {
+        Referrer storage _currentReferrer = referrersList[_referrerAddress][_couponId];
+        _currentReferrer.users.push(msg.sender);
     }
 
     function getCoupons() public view returns (Coupon[] memory){
@@ -69,5 +85,10 @@ contract DigitalCoupon {
         }
 
         return coupons;   
+    }
+
+    function getAddressFromReferrer(uint _couponId, address _referrerAddress) public view returns (address [] memory){
+        Referrer memory _currentReferrer = referrersList[_referrerAddress][_couponId];
+        return _currentReferrer.users;
     }
 }
