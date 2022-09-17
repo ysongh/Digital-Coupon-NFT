@@ -13,6 +13,7 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
   const [loading, setLoading] = useState(false);
   const [referCount, setReferCount] = useState("");
   const [isCopy, setIsCopy] = useState(false);
+  const [url, setUrl] = useState("");
 
   useEffect(() => {
     if (dcContract) fetchCoupon();
@@ -21,6 +22,10 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
   useEffect(() => {
     if (dcContract) fetchReferrer();
   }, [dcContract])
+
+  useEffect(() => {
+    setUrl(window.location.origin);
+  }, [])
 
   const fetchCoupon = async () => {
     try{
@@ -100,7 +105,7 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
   }
 
   const copyReferrerLink = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/coupon/${id}/${ethAddress}`);
+    navigator.clipboard.writeText(`${url}/coupon/${id}/${ethAddress}`);
     setIsCopy(true)
   }
   
@@ -125,7 +130,7 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
               <InputGroup size='md'>
                 <Input
                   pr='4.5rem'
-                  value={window &&`${window.location.origin}/coupon/${id}/${ethAddress}`}
+                  value={`${url}/coupon/${id}/${ethAddress}`}
                 />
                 <InputRightElement width='4.5rem'>
                   <Tooltip label={isCopy ? "Copied" : "Copy"} closeOnClick={false}>
