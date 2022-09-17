@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Container, SimpleGrid, ButtonGroup, Image, InputGroup, InputRightElement, Input, Tooltip, Heading, Button, Text } from '@chakra-ui/react';
+import { Container, ButtonGroup, Button, Text } from '@chakra-ui/react';
 
-import { getDate } from '../../../utils/date';
+import CouponDetailCard from '../../../components/CouponDetailCard';
 
 export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMethods }) {
   const router = useRouter();
@@ -113,35 +113,14 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
     <Container maxW='1300px' mt='3'>
       {loading
         ? <p>Loading...</p>
-        :  <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
-            <Image src={coupon.cid + "/" + coupon?.couponData?.photoName} alt='Product' />
-            <div>
-              <Heading fontSize='2xl'>{coupon?.couponData?.title}</Heading>
-              <Text>{coupon?.couponData?.description}</Text>
-              <p>${coupon?.couponData?.price}</p>
-              <p>{coupon?.couponData?.discount} Off</p>
-              <p>Expire in {getDate(coupon?.expireDate?.toString())}</p>
-              <p>From {coupon.owner}</p>
-              <Button colorScheme='orange' onClick={buyProduct} mt='3'>
-                Buy it
-              </Button>
-
-              <Text fontSize='lg' mt='10' mb='1'>Share this with your friends</Text>
-              <InputGroup size='md'>
-                <Input
-                  pr='4.5rem'
-                  value={`${url}/coupon/${id}/${ethAddress}`}
-                />
-                <InputRightElement width='4.5rem'>
-                  <Tooltip label={isCopy ? "Copied" : "Copy"} closeOnClick={false}>
-                    <Button h='1.75rem' size='sm' onClick={copyReferrerLink}>
-                      Copy
-                    </Button>
-                  </Tooltip>
-                </InputRightElement>
-              </InputGroup>
-            </div>
-          </SimpleGrid>
+        :  <CouponDetailCard
+            coupon={coupon}
+            isCopy={isCopy}
+            id={id}
+            ethAddress={ethAddress}
+            url={url}
+            buyProduct={buyProduct}
+            copyReferrerLink={copyReferrerLink} />
         }
       <ButtonGroup spacing='3'>
         <Button colorScheme='orange' onClick={streamDai}>
