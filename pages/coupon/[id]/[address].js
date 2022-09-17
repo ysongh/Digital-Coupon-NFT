@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Container, SimpleGrid, ButtonGroup, Image, Heading, Button, Text } from '@chakra-ui/react';
+import { Container, SimpleGrid, ButtonGroup, Image, InputGroup, InputRightElement, Input, Tooltip, Heading, Button, Text } from '@chakra-ui/react';
 
 import { getDate } from '../../../utils/date';
 
@@ -12,6 +12,7 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
   const [showSFLink, setShowSFLink] = useState(false);
   const [loading, setLoading] = useState(false);
   const [referCount, setReferCount] = useState("");
+  const [isCopy, setIsCopy] = useState(false);
 
   useEffect(() => {
     if (dcContract) fetchCoupon();
@@ -97,6 +98,11 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
       console.error(error);
     }
   }
+
+  const copyReferrerLink = () => {
+    navigator.clipboard.writeText(`${window.location.origin}/coupon/${id}/${ethAddress}`);
+    setIsCopy(true)
+  }
   
   return (
     <Container maxW='1300px' mt='3'>
@@ -114,6 +120,21 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
               <Button colorScheme='orange' onClick={buyProduct} mt='3'>
                 Buy it
               </Button>
+
+              <Text fontSize='lg' mt='10' mb='1'>Share this with your friends</Text>
+              <InputGroup size='md'>
+                <Input
+                  pr='4.5rem'
+                  value={window &&`${window.location.origin}/coupon/${id}/${ethAddress}`}
+                />
+                <InputRightElement width='4.5rem'>
+                  <Tooltip label={isCopy ? "Copied" : "Copy"} closeOnClick={false}>
+                    <Button h='1.75rem' size='sm' onClick={copyReferrerLink}>
+                      Copy
+                    </Button>
+                  </Tooltip>
+                </InputRightElement>
+              </InputGroup>
             </div>
           </SimpleGrid>
         }
