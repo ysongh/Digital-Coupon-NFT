@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Container, SimpleGrid, ButtonGroup, Image, Heading, Button, Text } from '@chakra-ui/react';
 
-import { getDate } from '../../utils/date';
+import { getDate } from '../../../utils/date';
 
 export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMethods }) {
   const router = useRouter();
