@@ -12,6 +12,8 @@ contract DigitalCoupon {
         string cid;
         string tablelandId;
         uint expireDate;
+        uint price;
+        uint rewardPercentAmount;
         address owner;
     }
 
@@ -20,18 +22,18 @@ contract DigitalCoupon {
         address[] users;
     }
 
-    event CouponCreated (uint couponId, string cid, uint expireDate, address owner);
+    event CouponCreated (uint couponId, string cid, uint expireDate, uint price, uint rewardPercentAmount, address owner);
 
     constructor() {
-        createCoupon("https://dweb.link/ipfs/bafybeihcfd2bojowzxy6frpl54xqyt6cpk2wlp52avpetgj7yrcgx3m7ky", 7);
-        createCoupon("https://dweb.link/ipfs/bafybeigqj4in4bpiovytwo6ubsjc2myek6psciscszyozch3jlzs2hv3ra", 10);
+        createCoupon("https://dweb.link/ipfs/bafybeihcfd2bojowzxy6frpl54xqyt6cpk2wlp52avpetgj7yrcgx3m7ky", 7, 1000000000000000000, 10);
+        createCoupon("https://dweb.link/ipfs/bafybeigqj4in4bpiovytwo6ubsjc2myek6psciscszyozch3jlzs2hv3ra", 10, 1500000000000000000, 10);
     }
 
-    function createCoupon(string memory _cid, uint _timeAmount) public returns (uint) {
+    function createCoupon(string memory _cid, uint _timeAmount, uint _price, uint _rewardPercentAmount) public returns (uint) {
         uint _expireDate = block.timestamp + _timeAmount * 1 days;
 
-        couponList[totalCoupon] = Coupon(totalCoupon, _cid, "", _expireDate, msg.sender);
-        emit CouponCreated(totalCoupon, _cid, _expireDate, msg.sender);
+        couponList[totalCoupon] = Coupon(totalCoupon, _cid, "", _expireDate, _price, _rewardPercentAmount, msg.sender);
+        emit CouponCreated(totalCoupon, _cid, _expireDate, _price, _rewardPercentAmount, msg.sender);
         totalCoupon++;
 
         return totalCoupon - 1;
@@ -48,6 +50,18 @@ contract DigitalCoupon {
     }
 
     function addRefer(uint _couponId, address _referrerAddress) external {
+        Referrer storage _currentReferrer = referrersList[_referrerAddress][_couponId];
+        _currentReferrer.users.push(msg.sender);
+    }
+
+    function purchaseWithReferrer(uint _couponId, address _referrerAddress) external payable {
+        Coupon memory currentCoupon = couponList[_couponId];
+        uint toAmount = (currentCoupon.price * currentCoupon.rewardPercentAmount) / 100;
+        uint ownerAmount = currentCoupon.price - toAmount;
+
+        payable(currentCoupon.owner).transfer(ownerAmount);
+        payable(_referrerAddress).transfer(toAmount / 2);
+
         Referrer storage _currentReferrer = referrersList[_referrerAddress][_couponId];
         _currentReferrer.users.push(msg.sender);
     }
