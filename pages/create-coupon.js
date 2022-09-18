@@ -44,7 +44,8 @@ function CreateCoupon({ dcContract }) {
       console.log(`https://dweb.link/ipfs/${cid}`);
       setCid(`https://dweb.link/ipfs/${cid}`);
 
-      const transaction = await dcContract.createCoupon(`https://dweb.link/ipfs/${cid}`, days);
+      const priceToETH = +price * 10 ** 18;
+      const transaction = await dcContract.createCoupon(`https://dweb.link/ipfs/${cid}`, days, priceToETH.toString(), discount);
       const tx = await transaction.wait();
       console.log(tx);
       setTransactionHash(tx.transactionHash);
@@ -82,10 +83,10 @@ function CreateCoupon({ dcContract }) {
             <Input id='price' onChange={(e) => setPrice(e.target.value)}/>
           </FormControl>
           <FormControl mb='5'>
-            <FormLabel htmlFor='discount'>Discount</FormLabel>
+            <FormLabel htmlFor='discount'>Reward for Referrer (In %)</FormLabel>
             <Input id='discount' onChange={(e) => setDiscount(e.target.value)}/>
           </FormControl>
-          
+
           {loading
             ? <Spinner color='orange' mt='4' />
             : <ButtonGroup spacing='6' mt='4'>

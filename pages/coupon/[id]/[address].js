@@ -6,7 +6,7 @@ import CouponDetailCard from '../../../components/CouponDetailCard';
 
 export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMethods }) {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, address } = router.query;
 
   const [coupon, setCoupon] = useState({});
   const [showSFLink, setShowSFLink] = useState(false);
@@ -104,6 +104,16 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
     }
   }
 
+  const buyProductWithReferrer = async () => {
+    try {
+      const transaction = await dcContract.purchaseWithReferrer(id, address, { value: coupon.price.toString() });
+      const tx = await transaction.wait();
+      console.log(tx);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const copyReferrerLink = () => {
     navigator.clipboard.writeText(`${url}/coupon/${id}/${ethAddress}`);
     setIsCopy(true)
@@ -120,6 +130,7 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
             ethAddress={ethAddress}
             url={url}
             buyProduct={buyProduct}
+            buyProductWithReferrer={buyProductWithReferrer}
             copyReferrerLink={copyReferrerLink} />
         }
       <ButtonGroup spacing='3'>

@@ -10,7 +10,7 @@ const WorldIDWidget = dynamic(
   { ssr: false }
 );
 
-function CouponDetailCard({ coupon, isCopy, url, id, ethAddress, buyProduct, copyReferrerLink }) {
+function CouponDetailCard({ coupon, isCopy, url, id, ethAddress, buyProduct, buyProductWithReferrer, copyReferrerLink }) {
   return (
     <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
       <Image src={coupon.cid + "/" + coupon?.couponData?.photoName} alt='Product' />
@@ -33,9 +33,9 @@ function CouponDetailCard({ coupon, isCopy, url, id, ethAddress, buyProduct, cop
           enableTelemetry
           onSuccess={(verificationResponse) => console.log(verificationResponse)}
           onError={(error) => console.error(error)}
-        />;
+        />
 
-        <Button colorScheme='orange' onClick={buyProduct} mt='3'>
+        <Button colorScheme='orange' onClick={buyProductWithReferrer} mt='3'>
           Buy it with Referrer
         </Button>
 
