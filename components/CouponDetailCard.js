@@ -1,7 +1,14 @@
 import React from 'react';
-import { SimpleGrid, Image, InputGroup, InputRightElement, Input, Tooltip, Heading, Button, Text } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
+import { SimpleGrid, Image, InputGroup, InputRightElement, Input, Tooltip, Heading, Divider,Button, Text } from '@chakra-ui/react';
+import { WidgetProps } from "@worldcoin/id";
 
 import { getDate } from '../utils/date';
+
+const WorldIDWidget = dynamic(
+  () => import("@worldcoin/id").then((mod) => mod.WorldIDWidget),
+  { ssr: false }
+);
 
 function CouponDetailCard({ coupon, isCopy, url, id, ethAddress, buyProduct, copyReferrerLink }) {
   return (
@@ -16,6 +23,20 @@ function CouponDetailCard({ coupon, isCopy, url, id, ethAddress, buyProduct, cop
         <p>From {coupon.owner}</p>
         <Button colorScheme='orange' onClick={buyProduct} mt='3'>
           Buy it
+        </Button>
+
+        <Divider mt='4' mb='5' />
+
+        <WorldIDWidget
+          actionId={process.env.NEXT_PUBLIC_WORLDCOIN_ACTIONID} // obtain this from developer.worldcoin.org
+          signal="my_signal"
+          enableTelemetry
+          onSuccess={(verificationResponse) => console.log(verificationResponse)}
+          onError={(error) => console.error(error)}
+        />;
+
+        <Button colorScheme='orange' onClick={buyProduct} mt='3'>
+          Buy it with Referrer
         </Button>
 
         <Text fontSize='lg' mt='10' mb='1'>Share this with your friends</Text>

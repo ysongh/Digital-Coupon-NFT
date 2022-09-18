@@ -85,9 +85,10 @@ function CreateCoupon({ dcContract }) {
             <FormLabel htmlFor='discount'>Discount</FormLabel>
             <Input id='discount' onChange={(e) => setDiscount(e.target.value)}/>
           </FormControl>
+          
           {loading
-            ? <Spinner color='orange' />
-            : <ButtonGroup spacing='6'>
+            ? <Spinner color='orange' mt='4' />
+            : <ButtonGroup spacing='6' mt='4'>
                 <Button colorScheme='orange' onClick={handleSubmit}>
                   Create
                 </Button>
