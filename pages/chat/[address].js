@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Client } from '@xmtp/xmtp-js';
+import { SimpleGrid, Center, Box, FormControl, InputGroup, InputRightElement, Input, FormLabel, Badge,Button, Text } from '@chakra-ui/react';
 
-function Chat({ userSigner }) {
+function Chat({ userSigner, ethAddress }) {
   const router = useRouter();
   const { address } = router.query;
 
@@ -35,34 +36,56 @@ function Chat({ userSigner }) {
 
   const sendMessage = async () => {
     await conversationMethod.send(newMessage);
+    setNewMessage('');
   }
 
   return (
     <div>
       {!xmtpMethod
-        ? <button onClick={connect}>Connect to XMTP</button>
-        : <div>
-            <h2>Chat</h2>
-            <label htmlFor="address">Address to Chat With</label>
-            <input id="address" value={address} onChange={(e) => setToAddress(e.target.value)}/>
-            <button onClick={chatWith}>
-              Chat
-            </button>
-          </div>
+        ? <Center h='100px' color='white'>
+            <Button colorScheme='orange' onClick={connect}>
+              Connect to XMTP
+            </Button>
+          </Center>
+        : <Center>
+            <Box borderWidth='1px' borderRadius='lg' borderColor='orange' overflow='hidden' p='5' width='600px' mt='5'>
+              <h2>Chat</h2>
+              <FormControl mb='3'>
+                <FormLabel htmlFor='address'>Address to Chat With</FormLabel>
+                <Input id="address" value={address} onChange={(e) => setToAddress(e.target.value)}/>
+              </FormControl>
+             
+              <Button colorScheme='orange'  onClick={chatWith}>
+                Chat
+              </Button>
+            </Box>
+          </Center>
       }
-      {conversationMethod && <div>
-        <h2>Messages to {toAddress}</h2>
-        {messagesList.map(m => (
-          <p key={m.id}>{m.content}</p>
-        ))}
-        <div>
-          <label htmlFor="message">Message</label>
-          <input id="message" onChange={(e) => setNewMessage(e.target.value)}/>
-        </div>
-        <button onClick={sendMessage}>
-            Send Message
-          </button>
-      </div>}
+      {conversationMethod && <Center>
+          <Box borderWidth='1px' borderRadius='lg' borderColor='orange' overflow='hidden' p='5' width='600px' mt='5'>
+            <h2>Messages to {toAddress}</h2>
+            {messagesList.map(m => (
+              <Text align={m.senderAddress === ethAddress ? "right" : "left"} key={m.id}>
+                <Badge colorScheme={m.senderAddress === ethAddress && "orange"}>
+                  {m.content}
+                </Badge>
+              </Text>
+            ))}
+            <InputGroup size='md' mt='3'>
+              <Input
+                pr='4.5rem'
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+              />
+              <InputRightElement width='4.5rem'>
+                <Button h='1.75rem' size='sm' onClick={sendMessage}>
+                  Send
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </Box>
+        </Center>
+      }
     </div>
   )
 }
