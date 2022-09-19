@@ -137,11 +137,11 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
         <Button colorScheme='orange' onClick={streamDai}>
           Stream DAI
         </Button>
+        <Button colorScheme='orange' onClick={() => router.push(`/send-nft/${coupon.owner}`)}>
+          Send NFT
+        </Button>
         <Button colorScheme='orange' onClick={() => router.push(`/chat/${coupon.owner}`)}>
           Chat
-        </Button>
-        <Button colorScheme='orange' onClick={createReferrer}>
-          Be Referrer
         </Button>
       </ButtonGroup>
       <Text mt='3'>{referCount} Refers</Text>

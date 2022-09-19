@@ -16,6 +16,7 @@
     "@uauth/js": "^2.3.0",
     "@worldcoin/id": "^0.8.0",
     "@xmtp/xmtp-js": "^6.0.3",
+    "axios": "^0.27.2",
     "ethers": "^5.7.0",
     "framer-motion": "^6.5.1",
     "next": "12.2.5",
