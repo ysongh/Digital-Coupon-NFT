@@ -3,7 +3,7 @@ import { Container, SimpleGrid } from '@chakra-ui/react';
 
 import CouponCard from '../components/CouponCard';
 
-export default function Home({ domainData, dcContract }) {
+export default function Home({ dcContract }) {
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -36,7 +36,6 @@ export default function Home({ domainData, dcContract }) {
   
   return (
     <Container maxW='1100px' mt='3'>
-      <p>{JSON.stringify(domainData)}</p>
       <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
         {loading
           ? <p>Loading...</p>

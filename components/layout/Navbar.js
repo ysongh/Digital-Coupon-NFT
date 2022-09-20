@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import UAuth from '@uauth/js';
-import { Box, Container, Flex, Spacer, Link, Button } from '@chakra-ui/react';
+import { Box, Container, Flex, Heading, Spacer, Link, Button } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
 import { Framework } from "@superfluid-finance/sdk-core";
@@ -15,7 +15,7 @@ const uauth = new UAuth({
   scope: "openid wallet"
 });
 
-function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDCContract, setsfMethods }) {
+function Navbar({ ethAddress, domainData, setDomainData, setETHAddress, setUserSigner, setDCContract, setsfMethods }) {
   const [balance, setBalance] = useState('');
   const [chainName, setChainName] = useState('');
 
@@ -26,7 +26,7 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
       console.log(authorization);
 
       setDomainData(authorization);
-      connectWallet();
+      connectMetamask();
     } catch (error) {
       console.error(error);
     }
@@ -67,7 +67,7 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
   }
 
   return (
-    <Box bg='#e1e8f2' px={2}>
+    <Box bg='#e1e8f2' p={2}>
        <Head>
         <title>Digital Coupon NFT</title>
         <meta name="description" content="Digital Coupon NFT" />
@@ -75,9 +75,10 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
       </Head>
       <Container maxW='1300px'>
         <Flex minWidth='max-content' alignItems='center' gap='2'>
-          <Box p='2'>
+          <Box>
             <NextLink href='/' passHref>
-              <img src="/logo.png" alt="Logo" style={{ width: "200px", cursor: "pointer" }}/>
+              {/* <Image src="/logo.png" alt="Logo" style={{ width: "200px", cursor: "pointer" }}/> */}
+              <Heading fontSize='2xl' color='orange.500' mr='3' cursor='pointer'>Digital Coupon NFT</Heading>
             </NextLink>
           </Box>
           <NextLink href='/' passHref>
@@ -91,11 +92,11 @@ function Navbar({ ethAddress, setDomainData, setETHAddress, setUserSigner, setDC
           </NextLink>
           <Spacer />
           {ethAddress && <p>{chainName} {balance / 10 ** 18} ETH</p>}
-          {!ethAddress && <Button colorScheme='orange' onClick={loginWithUnstoppableDomains}>
+          {!ethAddress && !domainData?.sub && <Button colorScheme='orange' onClick={loginWithUnstoppableDomains}>
             Login with Unstoppable
           </Button>}
           <Button colorScheme='orange' onClick={connectMetamask}>
-            {ethAddress ? ethAddress.substring(0, 5) + '...' + ethAddress.substring(36, 42) : 'Connect Wallet'}
+            {domainData?.sub ? domainData?.sub : ethAddress ? ethAddress.substring(0, 5) + '...' + ethAddress.substring(36, 42) : 'Connect Wallet'}
           </Button>
         </Flex>
       </Container>
