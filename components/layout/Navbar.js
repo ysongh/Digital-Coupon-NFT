@@ -15,7 +15,7 @@ const uauth = new UAuth({
   scope: "openid wallet"
 });
 
-function Navbar({ ethAddress, domainData, setDomainData, setETHAddress, setUserSigner, setDCContract, setsfMethods }) {
+function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddress, setUserSigner, setDCContract, setsfMethods, setTokenName }) {
   const [balance, setBalance] = useState('');
   const [chainName, setChainName] = useState('');
 
@@ -55,6 +55,7 @@ function Navbar({ ethAddress, domainData, setDomainData, setETHAddress, setUserS
       const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCoupon.abi, signer);
       setDCContract(contract);
       setChainName("Skale");
+      setTokenName("SFUEL");
     }
     else if(chainId === 80001){
       const sf = await Framework.create({
@@ -63,6 +64,7 @@ function Navbar({ ethAddress, domainData, setDomainData, setETHAddress, setUserS
       });
       console.log(sf);
       setsfMethods(sf);
+      setTokenName("MATIC");
     }
   }
 
@@ -91,7 +93,7 @@ function Navbar({ ethAddress, domainData, setDomainData, setETHAddress, setUserS
             <Link>Create Coupon</Link>
           </NextLink>
           <Spacer />
-          {ethAddress && <p>{chainName} {balance / 10 ** 18} ETH</p>}
+          {ethAddress && <p>{chainName} {balance / 10 ** 18} {tokenName}</p>}
           {!ethAddress && !domainData?.sub && <Button colorScheme='orange' onClick={loginWithUnstoppableDomains}>
             Login with Unstoppable
           </Button>}

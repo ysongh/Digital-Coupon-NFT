@@ -8,17 +8,20 @@ function MyApp({ Component, pageProps }) {
   const [domainData, setDomainData] = useState(null);
   const [dcContract, setDCContract] = useState(null);
   const [sfMethods, setsfMethods] = useState(null);
+  const [tokenName, setTokenName] = useState("");
 
   return (
     <ChakraProvider>
       <Navbar
         domainData={domainData}
         ethAddress={ethAddress}
+        tokenName={tokenName}
         setDomainData={setDomainData}
         setETHAddress={setETHAddress}
         setUserSigner={setUserSigner}
         setDCContract={setDCContract}
-        setsfMethods={setsfMethods} />
+        setsfMethods={setsfMethods}
+        setTokenName={setTokenName} />
       <Component
         {...pageProps}
         ethAddress={ethAddress}
