@@ -7,7 +7,7 @@ import CouponDetailCard from '../../../components/CouponDetailCard';
 
 const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_APIKEY });
 
-export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMethods }) {
+export default function CouponDetail({ tokenName, ethAddress, userSigner, dcContract, sfMethods }) {
   const router = useRouter();
   const { id, address } = router.query;
 
@@ -150,6 +150,7 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
       {loading
         ? <p>Loading...</p>
         :  <CouponDetailCard
+            tokenName={tokenName}
             coupon={coupon}
             isCopy={isCopy}
             id={id}

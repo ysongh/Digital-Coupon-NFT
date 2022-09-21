@@ -4,7 +4,7 @@ import { Box, Flex, Center, Spacer, Image, Heading, Button, Text } from '@chakra
 
 import { getDate } from '../utils/date';
 
-function CouponCard({ c }) {
+function CouponCard({ c, tokenName }) {
   const router = useRouter();
 
   return (
@@ -14,13 +14,19 @@ function CouponCard({ c }) {
         <Heading fontSize='lg' mt='3' mb='3'>{c.couponData.title}</Heading>
         <Spacer />
         <Center>
-          <Text mb='2' fontSize='md'>{c.couponData.discount} Off</Text>
+          <Text fontSize='md'>{c.couponData.discount} Off</Text>
         </Center>
       </Flex>
       <Text>Expire in {getDate(c.expireDate.toString())}</Text>
-      <Button mt='2' colorScheme='orange' onClick={() => router.push(`/coupon/${c.couponId.toString()}/0`)}>
-        View 
-      </Button>
+      <Flex>
+        <Button mt='2' colorScheme='orange' onClick={() => router.push(`/coupon/${c.couponId.toString()}/0`)}>
+          View 
+        </Button>
+        <Spacer />
+        <Center>
+          <Text fontSize='lg'>{c.price.toString() / 10 ** 18} {tokenName}</Text>
+        </Center>
+      </Flex>
     </Box>
   )
 }

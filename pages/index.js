@@ -3,7 +3,7 @@ import { Container, SimpleGrid } from '@chakra-ui/react';
 
 import CouponCard from '../components/CouponCard';
 
-export default function Home({ dcContract }) {
+export default function Home({ tokenName, dcContract }) {
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +39,7 @@ export default function Home({ dcContract }) {
       <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
         {loading
           ? <p>Loading...</p>
-          : coupons.map(c => <CouponCard key={c.couponId.toString()} c={c} />
+          : coupons.map(c => <CouponCard key={c.couponId.toString()} c={c} tokenName={tokenName} />
         )}
       </SimpleGrid>
     </Container>

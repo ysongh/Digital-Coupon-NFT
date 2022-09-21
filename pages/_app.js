@@ -24,6 +24,7 @@ function MyApp({ Component, pageProps }) {
         setTokenName={setTokenName} />
       <Component
         {...pageProps}
+        tokenName={tokenName}
         ethAddress={ethAddress}
         userSigner={userSigner}
         domainData={domainData}

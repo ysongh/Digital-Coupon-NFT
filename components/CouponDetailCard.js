@@ -10,14 +10,14 @@ const WorldIDWidget = dynamic(
   { ssr: false }
 );
 
-function CouponDetailCard({ coupon, isCopy, url, id, ethAddress, buyProduct, buyProductWithReferrer, copyReferrerLink }) {
+function CouponDetailCard({ tokenName, coupon, isCopy, url, id, ethAddress, buyProduct, buyProductWithReferrer, copyReferrerLink }) {
   return (
     <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
       <Image src={coupon.cid + "/" + coupon?.couponData?.photoName} alt='Product' />
       <div>
         <Heading fontSize='2xl'>{coupon?.couponData?.title}</Heading>
         <Text>{coupon?.couponData?.description}</Text>
-        <p>${coupon?.couponData?.price}</p>
+        <p>{coupon?.price?.toString() / 10 ** 18} {tokenName}</p>
         <p>{coupon?.couponData?.discount} Off</p>
         <p>Expire in {getDate(coupon?.expireDate?.toString())}</p>
         <p>From {coupon.owner}</p>
