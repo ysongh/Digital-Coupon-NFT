@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, SimpleGrid } from '@chakra-ui/react';
+import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
 
 import CouponCard from '../components/CouponCard';
 
@@ -39,8 +39,12 @@ export default function MyCoupons({ ethAddress, dcContract }) {
       <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
       {loading
         ? <p>Loading...</p>
-        : coupons.map(c => <CouponCard key={c.couponId.toString()} c={c} />
-        )}
+        : coupons.length
+          ? coupons.map(c => <CouponCard key={c.couponId.toString()} c={c} />)
+          : <Heading mt='5' textAlign='center'>
+              You do not create any coupon
+            </Heading>
+        }
       </SimpleGrid>
     </Container>
   )
