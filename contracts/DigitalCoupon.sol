@@ -1,7 +1,13 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.4;
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract DigitalCoupon {  
+contract DigitalCoupon is ERC721URIStorage {  
+    using Counters for Counters.Counter;
+    Counters.Counter public _receiptIds;
+
     uint public totalCoupon = 0;
 
     mapping(uint => Coupon) public couponList;
@@ -23,8 +29,9 @@ contract DigitalCoupon {
     }
 
     event CouponCreated (uint couponId, string cid, uint expireDate, uint price, uint rewardPercentAmount, address owner);
+    event CouponSale (uint couponId, string cid, uint nftid, address referrer, address buyer);
 
-    constructor() {
+    constructor() ERC721("Digital Coupon Receipt", "DCR") {
         createCoupon("https://dweb.link/ipfs/bafybeihcfd2bojowzxy6frpl54xqyt6cpk2wlp52avpetgj7yrcgx3m7ky", 7, 1000000000000000000, 10);
         createCoupon("https://dweb.link/ipfs/bafybeigqj4in4bpiovytwo6ubsjc2myek6psciscszyozch3jlzs2hv3ra", 10, 1500000000000000000, 10);
     }
@@ -54,7 +61,7 @@ contract DigitalCoupon {
         _currentReferrer.users.push(msg.sender);
     }
 
-    function purchaseWithReferrer(uint _couponId, address _referrerAddress) external payable {
+    function purchaseWithReferrer(uint _couponId, address _referrerAddress, string memory _cid) external payable {
         Coupon memory currentCoupon = couponList[_couponId];
         uint toAmount = (currentCoupon.price * currentCoupon.rewardPercentAmount) / 100;
         uint ownerAmount = currentCoupon.price - toAmount;
@@ -64,6 +71,13 @@ contract DigitalCoupon {
 
         Referrer storage _currentReferrer = referrersList[_referrerAddress][_couponId];
         _currentReferrer.users.push(msg.sender);
+
+        _receiptIds.increment();
+        uint256 currentId = _receiptIds.current();
+        _mint(msg.sender, currentId);
+        _setTokenURI(currentId, _cid);
+
+        emit CouponSale(_couponId, _cid, currentId, _referrerAddress, msg.sender);
     }
 
     function getCoupons() public view returns (Coupon[] memory){
