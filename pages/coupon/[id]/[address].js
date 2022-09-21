@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Container, ButtonGroup, Button, Text } from '@chakra-ui/react';
+import { Web3Storage } from 'web3.storage';
 
 import CouponDetailCard from '../../../components/CouponDetailCard';
+
+const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_APIKEY });
 
 export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMethods }) {
   const router = useRouter();
@@ -106,7 +109,30 @@ export default function CouponDetail({ ethAddress, userSigner, dcContract, sfMet
 
   const buyProductWithReferrer = async () => {
     try {
-      const transaction = await dcContract.purchaseWithReferrer(id, address, { value: coupon.price.toString() });
+      const receiptData = JSON.stringify({ 
+        title: coupon?.couponData?.titl,
+        description: coupon?.couponData?.description,
+        photoURL: coupon.cid + "/" + coupon?.couponData?.photoName,
+        price: coupon?.couponData?.price,
+        referrer: address,
+        couponId: id,
+        date: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+      });
+      const blob = new Blob([receiptData], {type: 'text/plain'});
+      const receiptDataFile = new File([ blob ], 'receiptData.json');
+
+      const cid = await client.put([receiptDataFile], {
+        onRootCidReady: localCid => {
+          console.log(`> 🔑 locally calculated Content ID: ${localCid} `)
+          console.log('> 📡 sending files to web3.storage ')
+        },
+        onStoredChunk: bytes => console.log(`> 🛰 sent ${bytes.toLocaleString()} bytes to web3.storage`)
+      })
+
+      console.log(`https://dweb.link/ipfs/${cid}`);
+      const url = `https://dweb.link/ipfs/${cid}`;
+
+      const transaction = await dcContract.purchaseWithReferrer(id, address, url, { value: coupon.price.toString() });
       const tx = await transaction.wait();
       console.log(tx);
     } catch (error) {
