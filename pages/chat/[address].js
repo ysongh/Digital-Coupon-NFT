@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Client } from '@xmtp/xmtp-js';
-import { SimpleGrid, Center, Box, FormControl, InputGroup, InputRightElement, Input, FormLabel, Badge,Button, Text } from '@chakra-ui/react';
+import { Flex, Center, Box, FormControl, InputGroup, InputRightElement, Input, FormLabel, Badge, Button, Text } from '@chakra-ui/react';
 
 function Chat({ userSigner, ethAddress }) {
   const router = useRouter();
@@ -42,11 +42,12 @@ function Chat({ userSigner, ethAddress }) {
   return (
     <div>
       {!xmtpMethod
-        ? <Center h='100px' color='white'>
-            <Button colorScheme='orange' onClick={connect}>
+        ? <Flex direction='column' align='center' mt='16'>
+            <Button colorScheme='orange' onClick={connect} mb='1'>
               Connect to XMTP
             </Button>
-          </Center>
+            <Text>Powered by XMTP</Text>
+          </Flex>
         : <Center>
             <Box borderWidth='1px' borderRadius='lg' borderColor='orange' overflow='hidden' p='5' width='600px' mt='5'>
               <h2>Chat</h2>
