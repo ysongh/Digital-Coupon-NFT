@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Container, ButtonGroup, Button, Text } from '@chakra-ui/react';
+import { Container, SimpleGrid, ButtonGroup, Button, Text, InputGroup, InputRightElement, Input, Tooltip } from '@chakra-ui/react';
 import { Web3Storage } from 'web3.storage';
 
 import CouponDetailCard from '../../../components/CouponDetailCard';
@@ -146,7 +146,7 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
   }
   
   return (
-    <Container maxW='1300px' mt='3'>
+    <Container maxW='1300px' mt='5'>
       {loading
         ? <p>Loading...</p>
         :  <CouponDetailCard
@@ -160,22 +160,43 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
             buyProductWithReferrer={buyProductWithReferrer}
             copyReferrerLink={copyReferrerLink} />
         }
-      <ButtonGroup spacing='3'>
-        <Button colorScheme='orange' onClick={streamDai}>
-          Stream DAI
-        </Button>
-        <Button colorScheme='orange' onClick={() => router.push(`/send-nft/${coupon.owner}`)}>
-          Send NFT
-        </Button>
-        <Button colorScheme='orange' onClick={() => router.push(`/chat/${coupon.owner}`)}>
-          Chat
-        </Button>
-      </ButtonGroup>
-      <Text mt='3'>{referCount} Refers</Text>
+      <SimpleGrid minChildWidth='350px' columns={[4]} spacing={10}>
+        <div>
+          <Text fontSize='lg' mb='1'>Share this with your friends</Text>
+          <InputGroup size='md'>
+            <Input
+              pr='4.5rem'
+              value={`${url}/coupon/${id}/${ethAddress}`}
+            />
+            <InputRightElement width='4.5rem'>
+              <Tooltip label={isCopy ? "Copied" : "Copy"} closeOnClick={false}>
+                <Button h='1.75rem' size='sm' onClick={copyReferrerLink}>
+                  Copy
+                </Button>
+              </Tooltip>
+            </InputRightElement>
+          </InputGroup>
+        </div>
+        <div>
+          <ButtonGroup spacing='3'>
+            <Button colorScheme='orange' onClick={streamDai}>
+              Stream DAI
+            </Button>
+            <Button colorScheme='orange' onClick={() => router.push(`/send-nft/${coupon.owner}`)}>
+              Send NFT
+            </Button>
+            <Button colorScheme='orange' onClick={() => router.push(`/chat/${coupon.owner}`)}>
+              Chat
+            </Button>
+          </ButtonGroup>
 
-      {showSFLink && <a href={`https://app.superfluid.finance/`} target="_blank" rel="noopener noreferrer">
-        View Dashboard
-      </a>}
+          <Text mt='3'>{referCount} Refers</Text>
+
+          {showSFLink && <a href={`https://app.superfluid.finance/`} target="_blank" rel="noopener noreferrer">
+            View Dashboard
+          </a>}
+          </div>
+      </SimpleGrid>
     </Container>
   )
 }

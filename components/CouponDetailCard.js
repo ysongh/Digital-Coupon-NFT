@@ -1,6 +1,6 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { SimpleGrid, Image, InputGroup, InputRightElement, Input, Tooltip, Heading, Divider,Button, Text } from '@chakra-ui/react';
+import { SimpleGrid, Image, Heading, Divider, Button, Text } from '@chakra-ui/react';
 import { WidgetProps } from "@worldcoin/id";
 
 import { getDate } from '../utils/date';
@@ -10,9 +10,9 @@ const WorldIDWidget = dynamic(
   { ssr: false }
 );
 
-function CouponDetailCard({ tokenName, coupon, isCopy, url, id, ethAddress, buyProduct, buyProductWithReferrer, copyReferrerLink }) {
+function CouponDetailCard({ tokenName, coupon, buyProduct, buyProductWithReferrer }) {
   return (
-    <SimpleGrid minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
+    <SimpleGrid minChildWidth='300px' columns={[4]} spacing={10} mb='5'>
       <Image src={coupon.cid + "/" + coupon?.couponData?.photoName} alt='Product' />
       <div>
         <Heading fontSize='2xl'>{coupon?.couponData?.title}</Heading>
@@ -38,21 +38,6 @@ function CouponDetailCard({ tokenName, coupon, isCopy, url, id, ethAddress, buyP
         <Button colorScheme='orange' onClick={buyProductWithReferrer} mt='3'>
           Buy it with Referrer
         </Button>
-
-        <Text fontSize='lg' mt='10' mb='1'>Share this with your friends</Text>
-        <InputGroup size='md'>
-          <Input
-            pr='4.5rem'
-            value={`${url}/coupon/${id}/${ethAddress}`}
-          />
-          <InputRightElement width='4.5rem'>
-            <Tooltip label={isCopy ? "Copied" : "Copy"} closeOnClick={false}>
-              <Button h='1.75rem' size='sm' onClick={copyReferrerLink}>
-                Copy
-              </Button>
-            </Tooltip>
-          </InputRightElement>
-        </InputGroup>
       </div>
     </SimpleGrid>
   )
