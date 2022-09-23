@@ -4,7 +4,23 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
+import { ByteHasher } from './helpers/ByteHasher.sol';
+import { IWorldID } from './interfaces/IWorldID.sol';
+
 contract DigitalCoupon is ERC721URIStorage {  
+    using ByteHasher for bytes;
+
+    /// @notice Thrown when attempting to reuse a nullifier
+    error InvalidNullifier();
+
+    /// @dev The WorldID instance that will be used for verifying proofs
+    IWorldID internal immutable worldId;
+
+    /// @dev The WorldID group ID (1)
+    uint256 internal immutable groupId = 1;
+
+    string actionId = "";
+
     using Counters for Counters.Counter;
     Counters.Counter public _receiptIds;
 
@@ -25,13 +41,17 @@ contract DigitalCoupon is ERC721URIStorage {
 
     struct Referrer {
         uint couponId;
-        address[] users;
+        uint256 nullifierHash;
     }
 
     event CouponCreated (uint couponId, string cid, uint expireDate, uint price, uint rewardPercentAmount, address owner);
     event CouponSale (uint couponId, string cid, uint nftid, address referrer, address buyer);
 
-    constructor() ERC721("Digital Coupon Receipt", "DCR") {
+    /// @param _worldId The WorldID instance that will verify the proofs
+    constructor(IWorldID _worldId, string memory _actionId) ERC721("Digital Coupon Receipt", "DCR") {
+        worldId = _worldId;
+        actionId = _actionId;
+
         createCoupon("https://dweb.link/ipfs/bafybeihcfd2bojowzxy6frpl54xqyt6cpk2wlp52avpetgj7yrcgx3m7ky", 7, 1000000000000000000, 10);
         createCoupon("https://dweb.link/ipfs/bafybeigqj4in4bpiovytwo6ubsjc2myek6psciscszyozch3jlzs2hv3ra", 10, 1500000000000000000, 10);
     }
@@ -46,9 +66,17 @@ contract DigitalCoupon is ERC721URIStorage {
         return totalCoupon - 1;
     }
 
-    function createReferrer(uint _couponId) external {
-        referrersList[msg.sender][_couponId] = Referrer(_couponId, new address[](0));
-        referrersList[msg.sender][_couponId].users.push(msg.sender);
+    function createReferrer(address signal, uint256 root, uint256 _nullifierHash, uint256[8] calldata proof, uint _couponId) external {
+        // Verify they're registered with WorldID, and the input they've provided is correct
+        worldId.verifyProof(
+            root,
+            groupId,
+            abi.encodePacked(signal).hashToField(),
+            _nullifierHash,
+            abi.encodePacked(actionId).hashToField(),
+            proof
+        );
+        referrersList[msg.sender][_couponId] = Referrer(_couponId, _nullifierHash);
     }
 
     function setTablelandId(uint _id, string memory _tablelandId) public {
@@ -56,21 +84,18 @@ contract DigitalCoupon is ERC721URIStorage {
         currentCoupon.tablelandId = _tablelandId;
     }
 
-    function addRefer(uint _couponId, address _referrerAddress) external {
+    function purchaseWithReferrer(uint _couponId, address _referrerAddress, string memory _cid, uint256 _nullifierHash) external payable {
         Referrer storage _currentReferrer = referrersList[_referrerAddress][_couponId];
-        _currentReferrer.users.push(msg.sender);
-    }
 
-    function purchaseWithReferrer(uint _couponId, address _referrerAddress, string memory _cid) external payable {
+        // Should not use the referrer code for themselve
+        if (_currentReferrer.nullifierHash == _nullifierHash) revert InvalidNullifier();
+
         Coupon memory currentCoupon = couponList[_couponId];
         uint toAmount = (currentCoupon.price * currentCoupon.rewardPercentAmount) / 100;
         uint ownerAmount = currentCoupon.price - toAmount;
 
         payable(currentCoupon.owner).transfer(ownerAmount);
         payable(_referrerAddress).transfer(toAmount / 2);
-
-        Referrer storage _currentReferrer = referrersList[_referrerAddress][_couponId];
-        _currentReferrer.users.push(msg.sender);
 
         _receiptIds.increment();
         uint256 currentId = _receiptIds.current();
@@ -113,10 +138,5 @@ contract DigitalCoupon is ERC721URIStorage {
         }
 
         return coupons;   
-    }
-
-    function getAddressFromReferrer(uint _couponId, address _referrerAddress) public view returns (address [] memory){
-        Referrer memory _currentReferrer = referrersList[_referrerAddress][_couponId];
-        return _currentReferrer.users;
     }
 }

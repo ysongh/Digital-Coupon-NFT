@@ -7,8 +7,10 @@
 const hre = require("hardhat");
 
 async function main() {
+  const worldIDAddress = "0xABB70f7F39035586Da57B3c8136035f87AC0d2Aa";
+  const actionID = "";
   const DigitalCoupon = await hre.ethers.getContractFactory("DigitalCoupon");
-  const digitalCoupon = await DigitalCoupon.deploy();
+  const digitalCoupon = await DigitalCoupon.deploy(worldIDAddress, actionID);
 
   await digitalCoupon.deployed();
 
