@@ -57,6 +57,12 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
       setChainName("Skale");
       setTokenName("SFUEL");
     }
+    if(chainId === 1313161555){
+      const contract = new ethers.Contract(process.env.NEXT_PUBLIC_AURORA_CONTRACTADDRESS, DigitalCoupon.abi, signer);
+      setDCContract(contract);
+      setChainName("Aurora");
+      setTokenName("ETH");
+    }
     else if(chainId === 80001){
       const sf = await Framework.create({
         chainId: 80001,

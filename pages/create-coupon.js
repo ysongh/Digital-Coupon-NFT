@@ -5,7 +5,7 @@ import { FormControl, FormLabel, Box, ButtonGroup, Spinner, Input, Heading, Butt
 
 const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_APIKEY });
 
-function CreateCoupon({ dcContract }) {
+function CreateCoupon({ tokenName, dcContract }) {
   const router = useRouter();
 
   const [title, setTitle] = useState('');
@@ -79,7 +79,7 @@ function CreateCoupon({ dcContract }) {
             <Input id='Expire Date' onChange={(e) => setDays(e.target.value)}/>
           </FormControl>
           <FormControl mb='3'>
-            <FormLabel htmlFor='price'>Price</FormLabel>
+            <FormLabel htmlFor='price'>Price (In {tokenName})</FormLabel>
             <Input id='price' onChange={(e) => setPrice(e.target.value)}/>
           </FormControl>
           <FormControl mb='5'>
