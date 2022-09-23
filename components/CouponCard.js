@@ -9,7 +9,7 @@ function CouponCard({ c, tokenName }) {
 
   return (
     <Box borderWidth='1px' borderRadius='lg' overflow='hidden' p='4'>
-      <Image src={c.cid + "/" + c.couponData.photoName} alt="Product" />
+      <Image src={c.cid + "/" + c.couponData.photoName} alt="Product" h='250' w='full' style={{ objectFit: 'contain' }} />
       <Flex>
         <Heading fontSize='lg' mt='3' mb='3'>{c.couponData.title}</Heading>
         <Spacer />

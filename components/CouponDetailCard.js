@@ -13,7 +13,7 @@ const WorldIDWidget = dynamic(
 function CouponDetailCard({ tokenName, coupon, buyProduct, buyProductWithReferrer }) {
   return (
     <SimpleGrid minChildWidth='300px' columns={[4]} spacing={10} mb='5'>
-      <Image src={coupon.cid + "/" + coupon?.couponData?.photoName} alt='Product' />
+      <Image src={coupon.cid + "/" + coupon?.couponData?.photoName} alt='Product' bg='#fff7e6' h='400' w='full' style={{ objectFit: 'contain' }} />
       <div>
         <Heading fontSize='2xl'>{coupon?.couponData?.title}</Heading>
         <Text>{coupon?.couponData?.description}</Text>
