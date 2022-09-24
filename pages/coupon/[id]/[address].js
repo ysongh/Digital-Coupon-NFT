@@ -199,7 +199,7 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
             <Text fontSize='lg' mb='2'>Create Referrer Link to Share</Text>
             <WorldIDWidget
               actionId={process.env.NEXT_PUBLIC_WORLDCOIN_ACTIONID} // obtain this from developer.worldcoin.org
-              signal="my_signal"
+              signal={ethAddress}
               enableTelemetry
               onSuccess={(verificationResponse) => setWorldcoinData(verificationResponse)}
               onError={(error) => console.error(error)}

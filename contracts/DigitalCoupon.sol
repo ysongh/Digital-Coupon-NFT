@@ -19,6 +19,8 @@ contract DigitalCoupon is ERC721URIStorage {
     /// @dev The WorldID group ID (1)
     uint256 internal immutable groupId = 1;
 
+    string public actionId = "";
+
     using Counters for Counters.Counter;
     Counters.Counter public _receiptIds;
 
@@ -70,7 +72,7 @@ contract DigitalCoupon is ERC721URIStorage {
             groupId,
             abi.encodePacked(input).hashToField(),
             _nullifierHash,
-            abi.encodePacked(address(this)).hashToField(),
+            abi.encodePacked(actionId).hashToField(),
             proof
         );
         referrersList[msg.sender][_couponId] = Referrer(_couponId, _nullifierHash);
