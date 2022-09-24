@@ -8,6 +8,7 @@ import Web3Modal from 'web3modal';
 import { Framework } from "@superfluid-finance/sdk-core";
 
 import DigitalCoupon from '../../artifacts/contracts/DigitalCoupon.sol/DigitalCoupon.json';
+import DigitalCouponV1 from '../../artifacts/contracts/DigitalCouponV1.sol/DigitalCouponV1.json';
 
 const uauth = new UAuth({
   clientID: process.env.NEXT_PUBLIC_UNSTOPPABLEDOMAINS_CLIENTID,
@@ -52,13 +53,13 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
     setBalance(_balance.toString());
 
     if(chainId === 647426021){
-      const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCoupon.abi, signer);
+      const contract = new ethers.Contract(process.env.NEXT_PUBLIC_SKALE_CONTRACTADDRESS, DigitalCouponV1.abi, signer);
       setDCContract(contract);
       setChainName("Skale");
       setTokenName("SFUEL");
     }
     if(chainId === 1313161555){
-      const contract = new ethers.Contract(process.env.NEXT_PUBLIC_AURORA_CONTRACTADDRESS, DigitalCoupon.abi, signer);
+      const contract = new ethers.Contract(process.env.NEXT_PUBLIC_AURORA_CONTRACTADDRESS, DigitalCouponV1.abi, signer);
       setDCContract(contract);
       setChainName("Aurora");
       setTokenName("ETH");
