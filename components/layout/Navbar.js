@@ -64,12 +64,15 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
       setTokenName("ETH");
     }
     else if(chainId === 80001){
+      const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MUMBAI_CONTRACTADDRESS, DigitalCoupon.abi, signer);
+      setDCContract(contract);
       const sf = await Framework.create({
-        chainId: 80001,
+        chainId: chainId,
         provider: provider
       });
       console.log(sf);
       setsfMethods(sf);
+      setChainName("Mumbai");
       setTokenName("MATIC");
     }
   }
