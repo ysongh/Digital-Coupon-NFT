@@ -19,8 +19,6 @@ contract DigitalCoupon is ERC721URIStorage {
     /// @dev The WorldID group ID (1)
     uint256 internal immutable groupId = 1;
 
-    string actionId = "";
-
     using Counters for Counters.Counter;
     Counters.Counter public _receiptIds;
 
@@ -48,9 +46,8 @@ contract DigitalCoupon is ERC721URIStorage {
     event CouponSale (uint couponId, string cid, uint nftid, address referrer, address buyer);
 
     /// @param _worldId The WorldID instance that will verify the proofs
-    constructor(IWorldID _worldId, string memory _actionId) ERC721("Digital Coupon Receipt", "DCR") {
+    constructor(IWorldID _worldId) ERC721("Digital Coupon Receipt", "DCR") {
         worldId = _worldId;
-        actionId = _actionId;
 
         createCoupon("https://dweb.link/ipfs/bafybeihcfd2bojowzxy6frpl54xqyt6cpk2wlp52avpetgj7yrcgx3m7ky", 7, 1000000000000000000, 10);
         createCoupon("https://dweb.link/ipfs/bafybeigqj4in4bpiovytwo6ubsjc2myek6psciscszyozch3jlzs2hv3ra", 10, 1500000000000000000, 10);
@@ -66,14 +63,14 @@ contract DigitalCoupon is ERC721URIStorage {
         return totalCoupon - 1;
     }
 
-    function createReferrer(address signal, uint256 root, uint256 _nullifierHash, uint256[8] calldata proof, uint _couponId) external {
+    function createReferrer(address input, uint256 root, uint256 _nullifierHash, uint256[8] calldata proof, uint _couponId) external {
         // Verify they're registered with WorldID, and the input they've provided is correct
         worldId.verifyProof(
             root,
             groupId,
-            abi.encodePacked(signal).hashToField(),
+            abi.encodePacked(input).hashToField(),
             _nullifierHash,
-            abi.encodePacked(actionId).hashToField(),
+            abi.encodePacked(address(this)).hashToField(),
             proof
         );
         referrersList[msg.sender][_couponId] = Referrer(_couponId, _nullifierHash);

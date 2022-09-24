@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { Container, SimpleGrid, ButtonGroup, Button, Text, InputGroup, InputRightElement, Input, Tooltip } from '@chakra-ui/react';
 import { Web3Storage } from 'web3.storage';
+import { WidgetProps } from "@worldcoin/id";
+import { ethers, utils } from 'ethers';
 
 import CouponDetailCard from '../../../components/CouponDetailCard';
 
 const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_APIKEY });
+
+const WorldIDWidget = dynamic(
+  () => import("@worldcoin/id").then((mod) => mod.WorldIDWidget),
+  { ssr: false }
+);
 
 export default function CouponDetail({ tokenName, ethAddress, userSigner, dcContract, sfMethods }) {
   const router = useRouter();
@@ -17,6 +25,7 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
   const [referCount, setReferCount] = useState("");
   const [isCopy, setIsCopy] = useState(false);
   const [url, setUrl] = useState("");
+  const [worldcoinData, setWorldcoinData] = useState({});
 
   useEffect(() => {
     if (dcContract) fetchCoupon();
@@ -54,10 +63,11 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
     try{
       setLoading(true);
 
-      const referrer = await dcContract.getAddressFromReferrer(id, ethAddress);
-      console.log(referrer);
-      setReferCount(referrer.length);
-
+      const referrer = await dcContract.referrersList(ethAddress, id);
+      console.warn(referrer);
+      console.warn(referrer.nullifierHash.toString());
+      setReferCount(referrer.nullifierHash.toString());
+      
       setLoading(false);
     } catch(error) {
      console.error(error);
@@ -89,9 +99,20 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
 
   const createReferrer = async () => {
     try {
-      const transaction = await dcContract.createReferrer(id);
+      console.log(worldcoinData);
+      const abi = ethers.utils.defaultAbiCoder;
+      const unpackedProof = abi.decode(["uint256[8]"], worldcoinData.proof)[0];
+      const transaction = await dcContract.createReferrer(
+        ethAddress,
+        worldcoinData.merkle_root,
+        worldcoinData.nullifier_hash,
+        unpackedProof,
+        id,
+        {gasLimit: 1e7}
+      );
       const tx = await transaction.wait();
       console.log(tx);
+      setReferCount("1");
     } catch (error) {
       console.error(error);
     }
@@ -151,32 +172,43 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
         ? <p>Loading...</p>
         :  <CouponDetailCard
             tokenName={tokenName}
+            address={address}
             coupon={coupon}
-            isCopy={isCopy}
-            id={id}
-            ethAddress={ethAddress}
-            url={url}
             buyProduct={buyProduct}
-            buyProductWithReferrer={buyProductWithReferrer}
-            copyReferrerLink={copyReferrerLink} />
+            buyProductWithReferrer={buyProductWithReferrer} />
         }
       <SimpleGrid minChildWidth='350px' columns={[4]} spacing={10}>
-        <div>
-          <Text fontSize='lg' mb='1'>Share this with your friends</Text>
-          <InputGroup size='md'>
-            <Input
-              pr='4.5rem'
-              value={`${url}/coupon/${id}/${ethAddress}`}
+        {referCount !== "0"
+          ? <div>
+            <Text fontSize='lg' mb='1'>Share this with your friends</Text>
+            <InputGroup size='md'>
+              <Input
+                pr='4.5rem'
+                value={`${url}/coupon/${id}/${ethAddress}`}
+              />
+              <InputRightElement width='4.5rem'>
+                <Tooltip label={isCopy ? "Copied" : "Copy"} closeOnClick={false}>
+                  <Button h='1.75rem' size='sm' onClick={copyReferrerLink}>
+                    Copy
+                  </Button>
+                </Tooltip>
+              </InputRightElement>
+            </InputGroup>
+          </div>
+          : <div>
+            <Text fontSize='lg' mb='2'>Create Referrer Link to Share</Text>
+            <WorldIDWidget
+              actionId={process.env.NEXT_PUBLIC_WORLDCOIN_ACTIONID} // obtain this from developer.worldcoin.org
+              signal="my_signal"
+              enableTelemetry
+              onSuccess={(verificationResponse) => setWorldcoinData(verificationResponse)}
+              onError={(error) => console.error(error)}
             />
-            <InputRightElement width='4.5rem'>
-              <Tooltip label={isCopy ? "Copied" : "Copy"} closeOnClick={false}>
-                <Button h='1.75rem' size='sm' onClick={copyReferrerLink}>
-                  Copy
-                </Button>
-              </Tooltip>
-            </InputRightElement>
-          </InputGroup>
-        </div>
+            <Button colorScheme='orange' mt='2' onClick={createReferrer}>
+              Create Referrer
+            </Button>
+          </div>
+        }
         <div>
           <ButtonGroup spacing='3'>
             <Button colorScheme='orange' onClick={streamDai}>
@@ -189,8 +221,6 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
               Chat
             </Button>
           </ButtonGroup>
-
-          <Text mt='3'>{referCount} Refers</Text>
 
           {showSFLink && <a href={`https://app.superfluid.finance/`} target="_blank" rel="noopener noreferrer">
             View Dashboard
