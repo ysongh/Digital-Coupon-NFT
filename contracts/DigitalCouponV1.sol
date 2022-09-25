@@ -31,10 +31,7 @@ contract DigitalCouponV1 is ERC721URIStorage {
     event CouponCreated (uint couponId, string cid, uint expireDate, uint price, uint rewardPercentAmount, address owner);
     event CouponSale (uint couponId, string cid, uint nftid, address referrer, address buyer);
 
-    constructor() ERC721("Digital Coupon Receipt", "DCR") {
-        createCoupon("https://dweb.link/ipfs/bafybeihcfd2bojowzxy6frpl54xqyt6cpk2wlp52avpetgj7yrcgx3m7ky", 7, 1000000000000000000, 10);
-        createCoupon("https://dweb.link/ipfs/bafybeigqj4in4bpiovytwo6ubsjc2myek6psciscszyozch3jlzs2hv3ra", 10, 1500000000000000000, 10);
-    }
+    constructor() ERC721("Digital Coupon Receipt", "DCR") {}
 
     function createCoupon(string memory _cid, uint _timeAmount, uint _price, uint _rewardPercentAmount) public returns (uint) {
         uint _expireDate = block.timestamp + _timeAmount * 1 days;

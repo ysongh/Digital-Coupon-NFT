@@ -50,9 +50,6 @@ contract DigitalCoupon is ERC721URIStorage {
     /// @param _worldId The WorldID instance that will verify the proofs
     constructor(IWorldID _worldId) ERC721("Digital Coupon Receipt", "DCR") {
         worldId = _worldId;
-
-        createCoupon("https://dweb.link/ipfs/bafybeihcfd2bojowzxy6frpl54xqyt6cpk2wlp52avpetgj7yrcgx3m7ky", 7, 1000000000000000000, 10);
-        createCoupon("https://dweb.link/ipfs/bafybeigqj4in4bpiovytwo6ubsjc2myek6psciscszyozch3jlzs2hv3ra", 10, 1500000000000000000, 10);
     }
 
     function createCoupon(string memory _cid, uint _timeAmount, uint _price, uint _rewardPercentAmount) public returns (uint) {
@@ -67,14 +64,14 @@ contract DigitalCoupon is ERC721URIStorage {
 
     function createReferrer(address input, uint256 root, uint256 _nullifierHash, uint256[8] calldata proof, uint _couponId) external {
         // Verify they're registered with WorldID, and the input they've provided is correct
-        // worldId.verifyProof(
-        //     root,
-        //     groupId,
-        //     abi.encodePacked(input).hashToField(),
-        //     _nullifierHash,
-        //     abi.encodePacked(actionId).hashToField(),
-        //     proof
-        // );
+        worldId.verifyProof(
+            root,
+            groupId,
+            abi.encodePacked(input).hashToField(),
+            _nullifierHash,
+            abi.encodePacked(actionId).hashToField(),
+            proof
+        );
         referrersList[msg.sender][_couponId] = Referrer(_couponId, _nullifierHash);
     }
 

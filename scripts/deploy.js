@@ -16,6 +16,11 @@ async function main() {
   console.log(
     `DigitalCoupon deployed to ${digitalCoupon.address}`
   );
+
+  await digitalCoupon.createCoupon("https://dweb.link/ipfs/bafybeihcfd2bojowzxy6frpl54xqyt6cpk2wlp52avpetgj7yrcgx3m7ky", "7", "1000000000000000000", "10");
+  console.log(`Coupon #1 is created`);
+  await digitalCoupon.createCoupon("https://dweb.link/ipfs/bafybeigqj4in4bpiovytwo6ubsjc2myek6psciscszyozch3jlzs2hv3ra", "10", "1500000000000000000", "10");
+  console.log(`Coupon #2 is created`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
