@@ -67,14 +67,14 @@ contract DigitalCoupon is ERC721URIStorage {
 
     function createReferrer(address input, uint256 root, uint256 _nullifierHash, uint256[8] calldata proof, uint _couponId) external {
         // Verify they're registered with WorldID, and the input they've provided is correct
-        worldId.verifyProof(
-            root,
-            groupId,
-            abi.encodePacked(input).hashToField(),
-            _nullifierHash,
-            abi.encodePacked(actionId).hashToField(),
-            proof
-        );
+        // worldId.verifyProof(
+        //     root,
+        //     groupId,
+        //     abi.encodePacked(input).hashToField(),
+        //     _nullifierHash,
+        //     abi.encodePacked(actionId).hashToField(),
+        //     proof
+        // );
         referrersList[msg.sender][_couponId] = Referrer(_couponId, _nullifierHash);
     }
 
