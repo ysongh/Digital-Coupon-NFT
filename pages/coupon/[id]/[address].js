@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { Container, SimpleGrid, ButtonGroup, Button, Text, InputGroup, InputRightElement, Input, Tooltip } from '@chakra-ui/react';
+import { Container, SimpleGrid, ButtonGroup, Box, Button, Text, InputGroup, InputRightElement, Input, Tooltip, useToast } from '@chakra-ui/react';
 import { Web3Storage } from 'web3.storage';
 import { WidgetProps } from "@worldcoin/id";
 import { ethers, utils } from 'ethers';
@@ -18,6 +18,8 @@ const WorldIDWidget = dynamic(
 export default function CouponDetail({ tokenName, ethAddress, userSigner, dcContract, sfMethods }) {
   const router = useRouter();
   const { id, address } = router.query;
+
+  const toast = useToast()
 
   const [coupon, setCoupon] = useState({});
   const [showSFLink, setShowSFLink] = useState(false);
@@ -156,6 +158,17 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
       const transaction = await dcContract.purchaseWithReferrer(id, address, url, { value: coupon.price.toString() });
       const tx = await transaction.wait();
       console.log(tx);
+
+      toast({
+        title: 'Transaction Success!',
+        description: tx.transactionHash,
+        status: 'success',
+        position: 'top-right',
+        variant: 'subtle',
+        duration: 9000,
+        isClosable: true,
+      })
+
     } catch (error) {
       console.error(error);
     }
