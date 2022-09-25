@@ -155,9 +155,18 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
       console.log(`https://dweb.link/ipfs/${cid}`);
       const url = `https://dweb.link/ipfs/${cid}`;
 
-      const transaction = await dcContract.purchaseWithReferrer(id, address, url, { value: coupon.price.toString() });
-      const tx = await transaction.wait();
-      console.log(tx);
+      let tx;
+
+      if(tokenName === "MATIC"){
+        const transaction = await dcContract.purchaseWithReferrer(id, address, url, worldcoinData.nullifier_hash, { value: coupon.price.toString() });
+        tx = await transaction.wait();
+        console.log(tx);
+      } else {
+        const transaction = await dcContract.purchaseWithReferrer(id, address, url, { value: coupon.price.toString() });
+        tx = await transaction.wait();
+        console.log(tx);
+      }
+      
 
       toast({
         title: 'Transaction Success!',
@@ -188,7 +197,8 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
             address={address}
             coupon={coupon}
             buyProduct={buyProduct}
-            buyProductWithReferrer={buyProductWithReferrer} />
+            buyProductWithReferrer={buyProductWithReferrer}
+            setWorldcoinData={setWorldcoinData} />
         }
       <SimpleGrid minChildWidth='350px' columns={[4]} spacing={10}>
         {referCount !== "0"

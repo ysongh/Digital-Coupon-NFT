@@ -10,7 +10,7 @@ const WorldIDWidget = dynamic(
   { ssr: false }
 );
 
-function CouponDetailCard({ tokenName, coupon, address, buyProduct, buyProductWithReferrer }) {
+function CouponDetailCard({ tokenName, coupon, address, buyProduct, buyProductWithReferrer, setWorldcoinData }) {
   return (
     <SimpleGrid minChildWidth='300px' columns={[4]} spacing={10} mb='5'>
       <Image src={coupon.cid + "/" + coupon?.couponData?.photoName} alt='Product' bg='#fff7e6' h='400' w='full' style={{ objectFit: 'contain' }} />
@@ -24,25 +24,25 @@ function CouponDetailCard({ tokenName, coupon, address, buyProduct, buyProductWi
           Buy it
         </Button>
 
-        {/* {address !== "0" && <>
+        {address !== "0" && <>
           <Divider mt='4' mb='5' />
 
           <WorldIDWidget
             actionId={process.env.NEXT_PUBLIC_WORLDCOIN_ACTIONID} // obtain this from developer.worldcoin.org
             signal="my_signal"
             enableTelemetry
-            onSuccess={(verificationResponse) => console.log(verificationResponse)}
+            onSuccess={(verificationResponse) => setWorldcoinData(verificationResponse)}
             onError={(error) => console.error(error)}
           />
 
           <Button colorScheme='orange' onClick={buyProductWithReferrer} mt='3'>
             Buy it with Referrer
           </Button>
-        </>} */}
-        <Divider mt='4' mb='2' />
+        </>}
+        {/* <Divider mt='4' mb='2' />
         <Button colorScheme='orange' onClick={buyProductWithReferrer} mt='3'>
           Buy it with Referrer
-        </Button>
+        </Button> */}
       </div>
     </SimpleGrid>
   )
