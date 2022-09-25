@@ -16,11 +16,10 @@ function CouponDetailCard({ tokenName, coupon, address, buyProduct, buyProductWi
       <Image src={coupon.cid + "/" + coupon?.couponData?.photoName} alt='Product' bg='#fff7e6' h='400' w='full' style={{ objectFit: 'contain' }} />
       <div>
         <Heading fontSize='2xl'>{coupon?.couponData?.title}</Heading>
-        <Text>{coupon?.couponData?.description}</Text>
-        <p>{coupon?.price?.toString() / 10 ** 18} {tokenName}</p>
-        <p>{coupon?.couponData?.discount} Off</p>
+        <Text mb='3'>{coupon?.couponData?.description}</Text>
         <p>Expire in {getDate(coupon?.expireDate?.toString())}</p>
         <p>From {coupon.owner}</p>
+        <p>Price: {coupon?.price?.toString() / 10 ** 18} {tokenName}</p>
         <Button colorScheme='orange' onClick={buyProduct} mt='3'>
           Buy it
         </Button>

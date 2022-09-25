@@ -193,7 +193,7 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
       <SimpleGrid minChildWidth='350px' columns={[4]} spacing={10}>
         {referCount !== "0"
           ? <div>
-            <Text fontSize='lg' mb='1'>Share this with your friends</Text>
+            <Text fontSize='lg' mb='1'>Share this with your friends and earn {coupon?.couponData?.discount}% of the sale</Text>
             <InputGroup size='md'>
               <Input
                 pr='4.5rem'
