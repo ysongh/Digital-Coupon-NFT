@@ -62,6 +62,7 @@ export default function Home({ tokenName, dcContract }) {
         temp.push({ "count": data.items.length, "image": c.image });
       })
       temp.push({ "count": 5, "image": "skalelogo.png" });
+      temp.push({ "count": 2, "image": "cronoslogo.png" });
       setReciptCounts(temp);
       
     } catch(error) {
@@ -74,7 +75,7 @@ export default function Home({ tokenName, dcContract }) {
   return (
     <Container maxW='1100px' mt='3'>
       <Heading mb='2'>Number of Sales on these Network</Heading>
-      <SimpleGrid bg='#ffe6cc' minChildWidth='250px' columns={[4]} spacing={10} mb='10'>
+      <SimpleGrid bg='#ffe6cc' minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
         {reciptCounts.map(r => <ChainCard r={r} />)}
       </SimpleGrid>
       <SimpleGrid minChildWidth='250px' columns={[4]} spacing={10} mb='10'>

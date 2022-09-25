@@ -6,9 +6,9 @@ function ChainCard({ r }) {
     <Box overflow='hidden' p='4'>
       <Flex>
         <Center>
-          <Text fontSize='2xl'>{r.count} NFTs Minted on</Text>
+          <Text fontSize='2xl'>{r.count} NFTs Minted</Text>
         </Center>
-        <Image src={r.image} alt="Logo" ml='3' style={{ width: "50px", cursor: "pointer" }}/>
+        <Image src={r.image} alt="Logo" ml='2' style={{ width: "40px", cursor: "pointer" }}/>
       </Flex>
     </Box>
   )

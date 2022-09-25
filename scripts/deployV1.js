@@ -7,13 +7,13 @@
 const hre = require("hardhat");
 
 async function main() {
-  const DigitalCoupon = await hre.ethers.getContractFactory("DigitalCoupon");
-  const digitalCoupon = await DigitalCoupon.deploy();
+  const DigitalCouponV1 = await hre.ethers.getContractFactory("DigitalCouponV1");
+  const digitalCouponV1 = await DigitalCouponV1.deploy();
 
-  await digitalCoupon.deployed();
+  await digitalCouponV1.deployed();
 
   console.log(
-    `DigitalCoupon deployed to ${digitalCoupon.address}`
+    `DigitalCouponV1 deployed to ${digitalCouponV1.address}`
   );
 }
 

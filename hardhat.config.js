@@ -19,6 +19,13 @@ module.exports = {
       chainId: 1313161555,
       gasPrice: 8000000000
     },
+    // npx hardhat run scripts/deployV1.js --network cronostest
+    cronostest: {
+      url: "https://evm-t3.cronos.org/",
+      accounts: [process.env.PRIVATEKEY],
+      chainId: 338,
+      gasPrice: 8000000000
+    },
     // npx hardhat run scripts/deploy.js --network mumbai
     mumbai: {
       url: "https://rpc-mumbai.maticvigil.com/",

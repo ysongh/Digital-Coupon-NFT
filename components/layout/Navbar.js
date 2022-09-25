@@ -64,6 +64,12 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
       setChainName("Aurora");
       setTokenName("ETH");
     }
+    if(chainId === 338){
+      const contract = new ethers.Contract(process.env.NEXT_PUBLIC_CRONO_CONTRACTADDRESS, DigitalCouponV1.abi, signer);
+      setDCContract(contract);
+      setChainName("Cronos");
+      setTokenName("CRO");
+    }
     else if(chainId === 80001){
       const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MUMBAI_CONTRACTADDRESS, DigitalCoupon.abi, signer);
       setDCContract(contract);
