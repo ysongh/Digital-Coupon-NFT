@@ -76,7 +76,7 @@ export default function Home({ tokenName, dcContract }) {
     <Container maxW='1100px' mt='3'>
       <Heading mb='2'>Number of Sales on these Network</Heading>
       <SimpleGrid bg='#ffe6cc' minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
-        {reciptCounts.map(r => <ChainCard r={r} />)}
+        {reciptCounts.map((r, index) => <ChainCard r={r} key={index} />)}
       </SimpleGrid>
       <SimpleGrid minChildWidth='250px' columns={[4]} spacing={10} mb='10'>
         {loading
