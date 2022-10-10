@@ -102,12 +102,12 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
           <NextLink href='/' passHref>
             <Link>Home</Link>
           </NextLink>
-          <NextLink href='/my-coupons' passHref>
+          {ethAddress && <NextLink href='/my-coupons' passHref>
             <Link>My Coupons</Link>
-          </NextLink>
-          <NextLink href='/create-coupon' passHref>
+          </NextLink>}
+          {ethAddress && <NextLink href='/create-coupon' passHref>
             <Link>Create Coupon</Link>
-          </NextLink>
+          </NextLink>}
           <Spacer />
           {ethAddress && <p>{chainName} {balance / 10 ** 18} {tokenName}</p>}
           {!ethAddress && !domainData?.sub && <Button colorScheme='orange' onClick={loginWithUnstoppableDomains}>
