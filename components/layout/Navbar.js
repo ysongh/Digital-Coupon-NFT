@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import UAuth from '@uauth/js';
-import { Box, Container, Flex, Heading, Spacer, Link, Button } from '@chakra-ui/react';
+import { Box, Container, Flex, Image, Spacer, Link, Button } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
 import { Framework } from "@superfluid-finance/sdk-core";
@@ -95,8 +95,7 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
         <Flex minWidth='max-content' alignItems='center' gap='2'>
           <Box>
             <NextLink href='/' passHref>
-              {/* <Image src="/logo.png" alt="Logo" style={{ width: "200px", cursor: "pointer" }}/> */}
-              <Heading fontSize='2xl' color='orange.500' mr='3' cursor='pointer'>Digital Coupon NFT</Heading>
+              <Image src="/logo.png" alt="Logo" style={{ width: "200px", cursor: "pointer" }}/>
             </NextLink>
           </Box>
           <NextLink href='/' passHref>
