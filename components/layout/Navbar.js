@@ -85,7 +85,7 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
   }
 
   return (
-    <Box bg='#e1e8f2' p={2}>
+    <Box bg='#f5eedf' p={2}>
        <Head>
         <title>Digital Coupon NFT</title>
         <meta name="description" content="Digital Coupon NFT" />
