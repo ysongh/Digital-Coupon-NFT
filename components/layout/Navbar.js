@@ -5,7 +5,6 @@ import UAuth from '@uauth/js';
 import { Box, Container, Flex, Image, Spacer, Link, Button } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
-import { Framework } from "@superfluid-finance/sdk-core";
 
 import DigitalCoupon from '../../artifacts/contracts/DigitalCoupon.sol/DigitalCoupon.json';
 import DigitalCouponV1 from '../../artifacts/contracts/DigitalCouponV1.sol/DigitalCouponV1.json';
@@ -16,7 +15,7 @@ const uauth = new UAuth({
   scope: "openid wallet"
 });
 
-function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddress, setUserSigner, setDCContract, setsfMethods, setTokenName }) {
+function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddress, setUserSigner, setDCContract, setTokenName }) {
   const [balance, setBalance] = useState('');
   const [chainName, setChainName] = useState('');
 
@@ -73,12 +72,6 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
     else if(chainId === 80001){
       const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MUMBAI_CONTRACTADDRESS, DigitalCoupon.abi, signer);
       setDCContract(contract);
-      const sf = await Framework.create({
-        chainId: chainId,
-        provider: provider
-      });
-      console.log(sf);
-      setsfMethods(sf);
       setChainName("Mumbai");
       setTokenName("MATIC");
     }

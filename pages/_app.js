@@ -7,7 +7,6 @@ function MyApp({ Component, pageProps }) {
   const [userSigner, setUserSigner] = useState(null);
   const [domainData, setDomainData] = useState(null);
   const [dcContract, setDCContract] = useState(null);
-  const [sfMethods, setsfMethods] = useState(null);
   const [tokenName, setTokenName] = useState("");
 
   return (
@@ -20,7 +19,6 @@ function MyApp({ Component, pageProps }) {
         setETHAddress={setETHAddress}
         setUserSigner={setUserSigner}
         setDCContract={setDCContract}
-        setsfMethods={setsfMethods}
         setTokenName={setTokenName} />
       <Component
         {...pageProps}
@@ -28,8 +26,7 @@ function MyApp({ Component, pageProps }) {
         ethAddress={ethAddress}
         userSigner={userSigner}
         domainData={domainData}
-        dcContract={dcContract}
-        sfMethods={sfMethods} />
+        dcContract={dcContract} />
     </ChakraProvider>
   )
 }

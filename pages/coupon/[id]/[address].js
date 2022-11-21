@@ -15,14 +15,13 @@ const WorldIDWidget = dynamic(
   { ssr: false }
 );
 
-export default function CouponDetail({ tokenName, ethAddress, userSigner, dcContract, sfMethods }) {
+export default function CouponDetail({ tokenName, ethAddress, userSigner, dcContract }) {
   const router = useRouter();
   const { id, address } = router.query;
 
   const toast = useToast()
 
   const [coupon, setCoupon] = useState({});
-  const [showSFLink, setShowSFLink] = useState(false);
   const [loading, setLoading] = useState(false);
   const [referCount, setReferCount] = useState("");
   const [isCopy, setIsCopy] = useState(false);
@@ -75,28 +74,6 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
      console.error(error);
      setLoading(false);
     }  
-  }
-
-  const streamDai = async () => {
-    try {
-      const DAIxContract = await sfMethods.loadSuperToken("fDAIx");
-      const DAIx = DAIxContract.address;
-      console.log(DAIx);
-
-      const createFlowOperation = sfMethods.cfaV1.createFlow({
-        receiver: coupon.owner,
-        flowRate: "1",
-        superToken: DAIx,
-      });
-
-      console.log("Creating your stream...");
-
-      const result = await createFlowOperation.exec(userSigner);
-      console.log(result);
-      setShowSFLink(true);
-    } catch (error) {
-      console.error(error);
-    }
   }
 
   const createReferrer = async () => {
@@ -234,9 +211,6 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
         }
         <div>
           <ButtonGroup spacing='3'>
-            <Button colorScheme='orange' onClick={streamDai}>
-              Stream DAI
-            </Button>
             <Button colorScheme='orange' onClick={() => router.push(`/send-nft/${coupon.owner}`)}>
               Send NFT
             </Button>
@@ -244,11 +218,7 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
               Chat
             </Button>
           </ButtonGroup>
-
-          {showSFLink && <a href={`https://app.superfluid.finance/`} target="_blank" rel="noopener noreferrer">
-            View Dashboard
-          </a>}
-          </div>
+        </div>
       </SimpleGrid>
     </Container>
   )
