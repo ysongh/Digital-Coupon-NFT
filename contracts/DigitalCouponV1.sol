@@ -116,4 +116,9 @@ contract DigitalCouponV1 is ERC721URIStorage {
         Referrer memory _currentReferrer = referrersList[_referrerAddress][_couponId];
         return _currentReferrer.users;
     }
+
+    // WARMING: Remove this on production
+    function withdrawETH() external {
+        payable(msg.sender).transfer(address(this).balance);
+    }
 }

@@ -135,4 +135,9 @@ contract DigitalCoupon is ERC721URIStorage {
 
         return coupons;   
     }
+
+    // WARMING: Remove this on production
+    function withdrawETH() external {
+        payable(msg.sender).transfer(address(this).balance);
+    }
 }
