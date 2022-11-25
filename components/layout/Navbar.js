@@ -57,13 +57,13 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
       setChainName("Skale");
       setTokenName("SFUEL");
     }
-    if(chainId === 1313161555){
+    else if(chainId === 1313161555){
       const contract = new ethers.Contract(process.env.NEXT_PUBLIC_AURORA_CONTRACTADDRESS, DigitalCouponV1.abi, signer);
       setDCContract(contract);
       setChainName("Aurora");
       setTokenName("ETH");
     }
-    if(chainId === 338){
+    else if(chainId === 338){
       const contract = new ethers.Contract(process.env.NEXT_PUBLIC_CRONO_CONTRACTADDRESS, DigitalCouponV1.abi, signer);
       setDCContract(contract);
       setChainName("Cronos");
@@ -74,6 +74,12 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
       setDCContract(contract);
       setChainName("Mumbai");
       setTokenName("MATIC");
+    }
+    else if(chainId === 9000){
+      const contract = new ethers.Contract(process.env.NEXT_PUBLIC_EVMOS_CONTRACTADDRESS, DigitalCouponV1.abi, signer);
+      setDCContract(contract);
+      setChainName("Evmos");
+      setTokenName("EVMOS");
     }
   }
 
