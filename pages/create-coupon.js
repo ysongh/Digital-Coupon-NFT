@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Web3Storage } from 'web3.storage';
-import { FormControl, FormLabel, Box, ButtonGroup, Spinner, Input, Heading, Button } from '@chakra-ui/react';
+import { FormControl, FormLabel, Box, ButtonGroup, Spinner, Input, Textarea, Heading, Button } from '@chakra-ui/react';
 
 const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_APIKEY });
 
@@ -68,7 +68,7 @@ function CreateCoupon({ tokenName, dcContract }) {
           </FormControl>
           <FormControl mb='3'>
             <FormLabel htmlFor='description'>Description</FormLabel>
-            <Input id='description' onChange={(e) => setDescription(e.target.value)}/>
+            <Textarea id='description' onChange={(e) => setDescription(e.target.value)} />
           </FormControl>
           <FormControl mb='3'>
             <FormLabel htmlFor='description'>Choose Photo</FormLabel>
