@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import UAuth from '@uauth/js';
-import { Box, Container, Flex, Image, Spacer, Link, Button } from '@chakra-ui/react';
+import { Box, Container, Flex, Image, Badge, Spacer, Link, Button } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal';
 
@@ -107,7 +107,7 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
             <Link>Create Coupon</Link>
           </NextLink>}
           <Spacer />
-          {ethAddress && <p>{chainName} {balance / 10 ** 18} {tokenName}</p>}
+          {ethAddress && <p><Badge colorScheme='orange' fontSize='.9rem'>{chainName}</Badge> {balance / 10 ** 18} {tokenName}</p>}
           {!ethAddress && !domainData?.sub && <Button colorScheme='orange' onClick={loginWithUnstoppableDomains}>
             Login with Unstoppable
           </Button>}
