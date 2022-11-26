@@ -1,6 +1,6 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { SimpleGrid, Image, Heading, Divider, Button, Text } from '@chakra-ui/react';
+import { SimpleGrid, Image, Heading, Divider, Spinner, Button, Text } from '@chakra-ui/react';
 import { WidgetProps } from "@worldcoin/id";
 
 import { getDate } from '../utils/date';
@@ -10,7 +10,7 @@ const WorldIDWidget = dynamic(
   { ssr: false }
 );
 
-function CouponDetailCard({ tokenName, coupon, address, buyProduct, buyProductWithReferrer, setWorldcoinData }) {
+function CouponDetailCard({ tokenName, coupon, address, buyLoading, buyProduct, buyProductWithReferrer, setWorldcoinData }) {
   return (
     <SimpleGrid minChildWidth='300px' columns={[4]} spacing={10} mb='5'>
       <Image src={coupon.cid + "/" + coupon?.couponData?.photoName} alt='Product' bg='#fff7e6' h='400' w='full' style={{ objectFit: 'contain' }} />
@@ -20,9 +20,13 @@ function CouponDetailCard({ tokenName, coupon, address, buyProduct, buyProductWi
         <p>Expire in {getDate(coupon?.expireDate?.toString())}</p>
         <p>From {coupon.owner}</p>
         <p>Price: {coupon?.price?.toString() / 10 ** 18} {tokenName}</p>
-        <Button colorScheme='orange' onClick={buyProduct} mt='3'>
-          Buy it
-        </Button>
+
+        {buyLoading
+            ? <Spinner color='orange' mt='4' />
+            :  <Button colorScheme='orange' onClick={buyProduct} mt='3'>
+                Buy it
+              </Button>
+          }
 
         {address !== "0" && <>
           <Divider mt='4' mb='5' />

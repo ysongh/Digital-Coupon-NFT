@@ -23,6 +23,7 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
 
   const [coupon, setCoupon] = useState({});
   const [loading, setLoading] = useState(false);
+  const [buyLoading, setBuyLoading] = useState(false);
   const [referCount, setReferCount] = useState("");
   const [isCopy, setIsCopy] = useState(false);
   const [url, setUrl] = useState("");
@@ -99,11 +100,14 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
 
   const buyProduct = async () => {
     try {
+      setBuyLoading(true);
       const transaction = await dcContract.addRefer(id, ethAddress);
       const tx = await transaction.wait();
       console.log(tx);
+      setBuyLoading(false);
     } catch (error) {
       console.error(error);
+      setBuyLoading(false);
     }
   }
 
@@ -173,6 +177,7 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
             tokenName={tokenName}
             address={address}
             coupon={coupon}
+            buyLoading={buyLoading}
             buyProduct={buyProduct}
             buyProductWithReferrer={buyProductWithReferrer}
             setWorldcoinData={setWorldcoinData} />
