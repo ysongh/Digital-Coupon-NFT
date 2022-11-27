@@ -4,6 +4,7 @@ import { SimpleGrid, Image, Heading, Divider, Spinner, Button, Text } from '@cha
 import { WidgetProps } from "@worldcoin/id";
 
 import { getDate } from '../utils/date';
+import { formatAddress } from '../utils/formatAddress';
 
 const WorldIDWidget = dynamic(
   () => import("@worldcoin/id").then((mod) => mod.WorldIDWidget),
@@ -18,7 +19,7 @@ function CouponDetailCard({ tokenName, coupon, address, buyLoading, buyProduct, 
         <Heading fontSize='2xl'>{coupon?.couponData?.title}</Heading>
         <Text mb='3'>{coupon?.couponData?.description}</Text>
         <p>Expire in {getDate(coupon?.expireDate?.toString())}</p>
-        <p>From {coupon.owner}</p>
+        <p>From {formatAddress(coupon.owner)}</p>
         <p>Price: {coupon?.price?.toString() / 10 ** 18} {tokenName}</p>
 
         {buyLoading

@@ -8,6 +8,7 @@ import Web3Modal from 'web3modal';
 
 import DigitalCoupon from '../../artifacts/contracts/DigitalCoupon.sol/DigitalCoupon.json';
 import DigitalCouponV1 from '../../artifacts/contracts/DigitalCouponV1.sol/DigitalCouponV1.json';
+import { formatAddress } from '../../utils/formatAddress';
 
 const uauth = new UAuth({
   clientID: process.env.NEXT_PUBLIC_UNSTOPPABLEDOMAINS_CLIENTID,
@@ -112,7 +113,7 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
             Login with Unstoppable
           </Button>}
           <Button colorScheme='orange' onClick={connectMetamask}>
-            {domainData?.sub ? domainData?.sub : ethAddress ? ethAddress.substring(0, 5) + '...' + ethAddress.substring(36, 42) : 'Connect Wallet'}
+            {domainData?.sub ? domainData?.sub : ethAddress ? formatAddress(ethAddress) : 'Connect Wallet'}
           </Button>
         </Flex>
       </Container>
