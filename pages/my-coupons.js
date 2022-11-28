@@ -36,7 +36,7 @@ export default function MyCoupons({ ethAddress, tokenName, dcContract }) {
   
   return (
     <Container maxW='1100px' mt='3'>
-      <SimpleGrid minChildWidth='250px' columns={[3]} spacing={10} mb='10'>
+      <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(300px, 1fr))'>
       {loading
         ? <p>Loading...</p>
         : coupons.length

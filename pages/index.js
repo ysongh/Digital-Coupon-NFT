@@ -79,7 +79,7 @@ export default function Home({ tokenName, dcContract }) {
       <SimpleGrid bg='#ffe6cc' minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
         {reciptCounts.map((r, index) => <ChainCard r={r} key={index} />)}
       </SimpleGrid>
-      <SimpleGrid minChildWidth='250px' columns={[3]} spacing={10} mb='10'>
+      <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(300px, 1fr))'>
         {loading
           ? <Spinner />
           : coupons.map(c => <CouponCard key={c.couponId.toString()} c={c} tokenName={tokenName} />
