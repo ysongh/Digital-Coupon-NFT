@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
 
 import CouponCard from '../components/CouponCard';
+import Spinner from '../components/common/Spinner';
 
 export default function MyCoupons({ ethAddress, tokenName, dcContract }) {
   const [coupons, setCoupons] = useState([]);
@@ -38,7 +39,7 @@ export default function MyCoupons({ ethAddress, tokenName, dcContract }) {
     <Container maxW='1100px' mt='3'>
       <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(300px, 1fr))'>
       {loading
-        ? <p>Loading...</p>
+        ? <Spinner />
         : coupons.length
           ? coupons.map(c => <CouponCard key={c.couponId.toString()} c={c} tokenName={tokenName} />)
           : <Heading mt='5' textAlign='center'>
