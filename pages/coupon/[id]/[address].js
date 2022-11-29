@@ -101,9 +101,12 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
   const buyProduct = async () => {
     try {
       setBuyLoading(true);
-      const transaction = await dcContract.addRefer(id, ethAddress);
-      const tx = await transaction.wait();
-      console.log(tx);
+      if(address !== 0) buyProductWithReferrer();
+      else {
+        const transaction = await dcContract.addRefer(id, ethAddress);
+        const tx = await transaction.wait();
+        console.log(tx);
+      }
       setBuyLoading(false);
     } catch (error) {
       console.error(error);
@@ -113,37 +116,37 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
 
   const buyProductWithReferrer = async () => {
     try {
-      const receiptData = JSON.stringify({ 
-        title: coupon?.couponData?.titl,
-        description: coupon?.couponData?.description,
-        photoURL: coupon.cid + "/" + coupon?.couponData?.photoName,
-        price: coupon?.couponData?.price,
-        referrer: address,
-        couponId: id,
-        date: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
-      });
-      const blob = new Blob([receiptData], {type: 'text/plain'});
-      const receiptDataFile = new File([ blob ], 'receiptData.json');
+      // const receiptData = JSON.stringify({ 
+      //   title: coupon?.couponData?.titl,
+      //   description: coupon?.couponData?.description,
+      //   photoURL: coupon.cid + "/" + coupon?.couponData?.photoName,
+      //   price: coupon?.couponData?.price,
+      //   referrer: address,
+      //   couponId: id,
+      //   date: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+      // });
+      // const blob = new Blob([receiptData], {type: 'text/plain'});
+      // const receiptDataFile = new File([ blob ], 'receiptData.json');
 
-      const cid = await client.put([receiptDataFile], {
-        onRootCidReady: localCid => {
-          console.log(`> 🔑 locally calculated Content ID: ${localCid} `)
-          console.log('> 📡 sending files to web3.storage ')
-        },
-        onStoredChunk: bytes => console.log(`> 🛰 sent ${bytes.toLocaleString()} bytes to web3.storage`)
-      })
+      // const cid = await client.put([receiptDataFile], {
+      //   onRootCidReady: localCid => {
+      //     console.log(`> 🔑 locally calculated Content ID: ${localCid} `)
+      //     console.log('> 📡 sending files to web3.storage ')
+      //   },
+      //   onStoredChunk: bytes => console.log(`> 🛰 sent ${bytes.toLocaleString()} bytes to web3.storage`)
+      // })
 
-      console.log(`https://dweb.link/ipfs/${cid}`);
-      const url = `https://dweb.link/ipfs/${cid}`;
+      // console.log(`https://dweb.link/ipfs/${cid}`);
+      // const url = `https://dweb.link/ipfs/${cid}`;
 
       let tx;
 
       if(tokenName === "MATIC"){
-        const transaction = await dcContract.purchaseWithReferrer(id, address, url, worldcoinData.nullifier_hash, { value: coupon.price.toString() });
+        const transaction = await dcContract.purchaseWithReferrer(id, address, "", worldcoinData.nullifier_hash, { value: coupon.price.toString() });
         tx = await transaction.wait();
         console.log(tx);
       } else {
-        const transaction = await dcContract.purchaseWithReferrer(id, address, url, { value: coupon.price.toString() });
+        const transaction = await dcContract.purchaseWithReferrer(id, address, "", { value: coupon.price.toString() });
         tx = await transaction.wait();
         console.log(tx);
       }

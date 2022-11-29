@@ -29,7 +29,7 @@ function CouponDetailCard({ tokenName, coupon, address, buyLoading, buyProduct, 
               </Button>
           }
 
-        {address !== "0" && <>
+        {/* {address !== "0" && <>
           <Divider mt='4' mb='5' />
 
           <WorldIDWidget
@@ -43,7 +43,7 @@ function CouponDetailCard({ tokenName, coupon, address, buyLoading, buyProduct, 
           <Button colorScheme='orange' onClick={buyProductWithReferrer} mt='3'>
             Buy it with Referrer
           </Button>
-        </>}
+        </>} */}
         {/* <Divider mt='4' mb='2' />
         <Button colorScheme='orange' onClick={buyProductWithReferrer} mt='3'>
           Buy it with Referrer
