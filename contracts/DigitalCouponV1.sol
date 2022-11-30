@@ -64,7 +64,7 @@ contract DigitalCouponV1 is ERC721URIStorage {
         uint ownerAmount = currentCoupon.price - toAmount;
 
         payable(currentCoupon.owner).transfer(ownerAmount);
-        payable(_referrerAddress).transfer(toAmount / 2);
+        payable(_referrerAddress).transfer(toAmount);
 
         Referrer storage _currentReferrer = referrersList[_referrerAddress][_couponId];
         _currentReferrer.users.push(msg.sender);
