@@ -80,7 +80,7 @@ export default function Home({ tokenName, dcContract }) {
   return (
     <Container maxW='1100px' mt='3'>
       <Heading mb='2'>Number of Sales on these Network</Heading>
-      <SimpleGrid bg='#ffe6cc' minChildWidth='200px' columns={[4]} spacing={10} mb='10'>
+      <SimpleGrid bg='#ffe6cc' minChildWidth='200px' columns={[4]} spacing={0} mb='10'>
         {reciptCounts.map((r, index) => <ChainCard r={r} key={index} />)}
       </SimpleGrid>
       <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(300px, 1fr))'>
