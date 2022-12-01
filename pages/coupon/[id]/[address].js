@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { Container, SimpleGrid, ButtonGroup, Box, Button, Text, InputGroup, InputRightElement, Input, Tooltip, useToast } from '@chakra-ui/react';
+import { Container, SimpleGrid, ButtonGroup, Button, Text, InputGroup, InputRightElement, Input, Tooltip, useToast } from '@chakra-ui/react';
 import { Web3Storage } from 'web3.storage';
 import { WidgetProps } from "@worldcoin/id";
 import { ethers, utils } from 'ethers';
@@ -176,15 +176,20 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
     <Container maxW='1300px' mt='5'>
       {loading
         ? <p>Loading...</p>
-        :  <CouponDetailCard
-            tokenName={tokenName}
-            address={address}
-            coupon={coupon}
-            buyLoading={buyLoading}
-            buyProduct={buyProduct}
-            buyProductWithReferrer={buyProductWithReferrer}
-            setWorldcoinData={setWorldcoinData} />
+        :  ethAddress
+            ? <CouponDetailCard
+                tokenName={tokenName}
+                address={address}
+                coupon={coupon}
+                buyLoading={buyLoading}
+                buyProduct={buyProduct}
+                buyProductWithReferrer={buyProductWithReferrer}
+                setWorldcoinData={setWorldcoinData} />
+            : <Text mt='14' fontSize='3xl' textAlign='center' color='red'>
+                Please Connect to your Wallet
+              </Text>
         }
+      {ethAddress && 
       <SimpleGrid minChildWidth='350px' columns={[4]} spacing={10}>
         {referCount !== "0"
           ? <div>
@@ -227,7 +232,7 @@ export default function CouponDetail({ tokenName, ethAddress, userSigner, dcCont
             </Button>
           </ButtonGroup>
         </div>
-      </SimpleGrid>
+      </SimpleGrid>}
     </Container>
   )
 }
