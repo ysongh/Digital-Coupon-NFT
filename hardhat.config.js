@@ -33,13 +33,6 @@ module.exports = {
       chainId: 80001,
       gasPrice: 8000000000
     },
-    // npx hardhat run scripts/deploy.js --network mumbai
-    mumbai: {
-      url: "https://rpc-mumbai.maticvigil.com/",
-      accounts: [process.env.PRIVATEKEY],
-      chainId: 80001,
-      gasPrice: 8000000000
-    },
     // npx hardhat run scripts/deployV1.js --network evmos
     evmos: {
       url: "https://eth.bd.evmos.dev:8545",
