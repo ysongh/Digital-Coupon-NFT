@@ -46,6 +46,13 @@ module.exports = {
       accounts: [process.env.PRIVATEKEY],
       chainId: 9000,
       gasPrice: 8000000000
+    },
+    // npx hardhat run scripts/deployV1.js --network moonbase
+    moonbase: {
+      url: "https://rpc.api.moonbase.moonbeam.network",
+      accounts: [process.env.PRIVATEKEY],
+      chainId: 1287,
+      gasPrice: 8000000000
     }
   },
 };
