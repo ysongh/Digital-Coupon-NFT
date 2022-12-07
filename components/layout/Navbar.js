@@ -82,6 +82,12 @@ function Navbar({ ethAddress, tokenName, domainData, setDomainData, setETHAddres
       setChainName("Evmos");
       setTokenName("EVMOS");
     }
+    else if(chainId === 1287){
+      const contract = new ethers.Contract(process.env.NEXT_PUBLIC_MOONBASE_CONTRACTADDRESS, DigitalCouponV1.abi, signer);
+      setDCContract(contract);
+      setChainName("Moonbase");
+      setTokenName("DEV");
+    }
   }
 
   return (
