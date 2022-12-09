@@ -45,6 +45,11 @@ export default function Home({ tokenName, dcContract }) {
     try{
       const chainList = [
         {
+          id: '1287',
+          address: process.env.NEXT_PUBLIC_MOONBASE_CONTRACTADDRESS,
+          image: "/moonbeamlogo.png"
+        },
+        {
           id: '9000',
           address: process.env.NEXT_PUBLIC_EVMOS_CONTRACTADDRESS,
           image: "/evmoslogo.png"
@@ -67,7 +72,6 @@ export default function Home({ tokenName, dcContract }) {
         console.log(data);
         temp.push({ "count": data.items.length, "image": c.image });
       })
-      temp.push({ "count": 5, "image": "skalelogo.png" });
       setReciptCounts(temp);
       
     } catch(error) {
